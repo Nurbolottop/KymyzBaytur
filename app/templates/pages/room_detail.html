@@ -7,11 +7,11 @@
 {% url 'rooms' as rooms_url %}
 {% include 'include/page_hero.html' with title=room.name subtitle=room.short_description image=room.image_url parent_url=rooms_url parent_title='Номера' %}
 
-<section class="section">
+<section class="section section--light">
   <div class="container room-detail">
     <div class="room-detail__main">
       <div class="room-gallery" data-lightbox-group>
-        <a class="room-gallery__main" href="{{ room.image_url }}" data-lightbox data-caption="{{ room.name }}">
+        <a class="room-gallery__main reveal-img mirror-img" href="{{ room.image_url }}" data-lightbox data-caption="{{ room.name }}">
           <img src="{{ room.image_url }}" alt="{{ room.name }}">
         </a>
         {% if room.photos.all|length > 1 %}
@@ -40,7 +40,7 @@
     </div>
 
     <aside class="room-detail__aside">
-      <div class="booking-card">
+      <div class="booking-card glass glass--light">
         <h2 class="h3">Стоимость за сутки</h2>
         <table class="rate-table">
           <thead><tr><th>Гостей</th><th>С питанием<br>и кымызом</th><th>Без питания</th></tr></thead>
@@ -64,7 +64,8 @@
 </section>
 
 {% if others %}
-<section class="section section--cream">
+<section class="section section--light">
+  <div class="aurora" aria-hidden="true"><span></span><span></span></div>
   <div class="container">
     {% include 'include/section_head.html' with eyebrow='Ещё варианты' title='Другие номера' %}
     <div class="grid grid--3">{% for room in others %}{% include 'include/room_card.html' %}{% endfor %}</div>

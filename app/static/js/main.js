@@ -1,87 +1,237 @@
 (() => {
   'use strict';
 
-  document.documentElement.classList.add('js');
-
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  /* ---------- Шапка: тень при скролле ---------- */
-  const header = $('[data-header]');
-  if (header) {
-    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 10);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+  /* ---------- Прелоадер ---------- */
+  const hidePreloader = () => document.documentElement.classList.add('is-loaded');
+  if (document.readyState === 'complete') hidePreloader();
+  else window.addEventListener('load', hidePreloader);
+  setTimeout(hidePreloader, 1800); // не держим дольше, даже если картинки грузятся
+
+  /* ---------- Плавный инерционный скролл (Lenis) ---------- */
+  let lenis = null;
+  if (window.Lenis && !reduceMotion) {
+    lenis = new window.Lenis({ autoRaf: true, anchors: { offset: -100 }, lerp: 0.09 });
+    window.__lenis = lenis; // для отладки из консоли
   }
+  const lockScroll = (lock) => {
+    if (lenis) lock ? lenis.stop() : lenis.start();
+    document.body.style.overflow = lock ? 'hidden' : '';
+  };
+
+  /* ---------- Шапка: стекло при скролле, прячется при прокрутке вниз ---------- */
+  const header = $('[data-header]');
+  let lastY = window.scrollY;
+  const onScrollHeader = () => {
+    if (!header) return;
+    const y = window.scrollY;
+    header.classList.toggle('is-scrolled', y > 40);
+    const goingDown = y > lastY && y > 400;
+    if (!document.body.classList.contains('nav-open')) header.classList.toggle('is-hidden', goingDown);
+    lastY = y;
+  };
 
   /* ---------- Мобильное меню ---------- */
   const burger = $('[data-burger]');
   if (burger) {
     const setOpen = (open) => {
       document.body.classList.toggle('nav-open', open);
+      if (open && header) header.classList.remove('is-hidden');
       burger.setAttribute('aria-expanded', String(open));
+      lockScroll(open);
     };
     burger.addEventListener('click', () => setOpen(!document.body.classList.contains('nav-open')));
     $$('[data-nav] a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
     document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
-    document.addEventListener('click', (e) => {
-      if (document.body.classList.contains('nav-open') && !e.target.closest('[data-nav], [data-burger]')) setOpen(false);
-    });
   }
 
-  /* ---------- Слайдер на главной ---------- */
+  /* ---------- Слайдер героя с прогресс-барами ---------- */
   const slider = $('[data-slider]');
   if (slider) {
-    const slides = $$('[data-slide]', slider);
+    const texts = $$('[data-slide]', slider);
+    const bgs = $$('[data-slide-bg]', slider);
     const dotsBox = $('[data-dots]', slider);
+    const delay = 6500;
     let index = 0;
     let timer;
 
-    const dots = slides.map((_, i) => {
+    const dots = texts.map((_, i) => {
       const dot = document.createElement('button');
       dot.type = 'button';
-      dot.className = 'hero__dot' + (i === 0 ? ' is-active' : '');
+      dot.className = 'hero__dot';
+      dot.innerHTML = '<i></i>';
       dot.setAttribute('aria-label', `Слайд ${i + 1}`);
-      dot.addEventListener('click', () => { go(i); restart(); });
+      dot.addEventListener('click', () => go(i));
       dotsBox && dotsBox.appendChild(dot);
       return dot;
     });
+    slider.style.setProperty('--slide-ms', `${delay}ms`);
 
     const go = (i) => {
-      slides[index].classList.remove('is-active');
-      dots[index] && dots[index].classList.remove('is-active');
-      index = (i + slides.length) % slides.length;
-      slides[index].classList.add('is-active');
-      dots[index] && dots[index].classList.add('is-active');
+      index = (i + texts.length) % texts.length;
+      texts.forEach((el, n) => el.classList.toggle('is-active', n === index));
+      bgs.forEach((el, n) => el.classList.toggle('is-active', n === index));
+      dots.forEach((dot, n) => {
+        dot.classList.remove('is-active');
+        if (n === index) { void dot.offsetWidth; dot.classList.add('is-active'); } // перезапуск анимации
+      });
+      clearTimeout(timer);
+      if (texts.length > 1) timer = setTimeout(() => go(index + 1), delay);
     };
-    const restart = () => {
-      clearInterval(timer);
-      if (slides.length > 1) timer = setInterval(() => go(index + 1), 6500);
-    };
-
-    $('[data-prev]', slider)?.addEventListener('click', () => { go(index - 1); restart(); });
-    $('[data-next]', slider)?.addEventListener('click', () => { go(index + 1); restart(); });
 
     let startX = null;
     slider.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
     slider.addEventListener('touchend', (e) => {
       if (startX === null) return;
       const dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 50) { go(index + (dx < 0 ? 1 : -1)); restart(); }
+      if (Math.abs(dx) > 60 && !e.target.closest('form')) go(index + (dx < 0 ? 1 : -1));
       startX = null;
     });
-    restart();
+    go(0);
+  }
+
+  /* ---------- Разбивка заголовков на слова для появления ---------- */
+  $$('[data-split]').forEach((el) => {
+    const parts = [];
+    el.childNodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent.split(/(\s+)/).forEach((chunk) => {
+          if (!chunk) return;
+          parts.push(/^\s+$/.test(chunk) ? document.createTextNode(' ') : chunk);
+        });
+      } else {
+        parts.push(node.cloneNode(true));
+      }
+    });
+    el.textContent = '';
+    let i = 0;
+    parts.forEach((part) => {
+      if (part instanceof Node && part.nodeType === Node.TEXT_NODE) { el.appendChild(part); return; }
+      const outer = document.createElement('span');
+      outer.className = 'w';
+      const inner = document.createElement('span');
+      inner.style.transitionDelay = `${i++ * 60}ms`;
+      if (typeof part === 'string') inner.textContent = part; else inner.appendChild(part);
+      outer.appendChild(inner);
+      el.appendChild(outer);
+    });
+  });
+
+  /* ---------- Появление при скролле ---------- */
+  const revealEls = $$('.reveal, .reveal-img, [data-split]');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('is-visible');
+        if (el.hasAttribute('data-tilt')) setTimeout(() => el.classList.add('tilt-ready'), 1200);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach((el) => {
+      const siblings = el.parentElement ? [...el.parentElement.children].filter((c) => c.matches('.reveal, .reveal-img')) : [];
+      const pos = siblings.indexOf(el);
+      if (pos > 0) el.style.transitionDelay = `${Math.min(pos, 5) * 90}ms`;
+      io.observe(el);
+    });
+  } else {
+    revealEls.forEach((el) => el.classList.add('is-visible', 'tilt-ready'));
+  }
+
+  /* ---------- Счётчики ---------- */
+  const counters = $$('[data-count]');
+  if (counters.length && 'IntersectionObserver' in window) {
+    const co = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseFloat(el.dataset.count);
+        const start = performance.now();
+        const dur = 1600;
+        const tick = (now) => {
+          const p = Math.min((now - start) / dur, 1);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        if (!reduceMotion) { el.textContent = '0'; requestAnimationFrame(tick); }
+        co.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach((el) => co.observe(el));
+  }
+
+  /* ---------- Параллакс ---------- */
+  const parallaxEls = $$('[data-parallax]');
+  let ticking = false;
+  const updateParallax = () => {
+    const vh = window.innerHeight;
+    parallaxEls.forEach((el) => {
+      const rect = el.parentElement.getBoundingClientRect();
+      if (rect.bottom < -100 || rect.top > vh + 100) return;
+      const speed = parseFloat(el.dataset.parallax) || 0.2;
+      const offset = (rect.top + rect.height / 2 - vh / 2) * speed * -1;
+      el.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+    });
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    onScrollHeader();
+    if (!ticking && parallaxEls.length && !reduceMotion) {
+      ticking = true;
+      requestAnimationFrame(updateParallax);
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------- Подсветка под курсором, 3D-наклон, магнитные кнопки ---------- */
+  if (finePointer && !reduceMotion) {
+    document.addEventListener('pointermove', (e) => {
+      const spot = e.target.closest('.spot');
+      if (spot) {
+        const r = spot.getBoundingClientRect();
+        spot.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        spot.style.setProperty('--my', `${e.clientY - r.top}px`);
+      }
+    }, { passive: true });
+
+    $$('[data-tilt]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.setProperty('--ry', `${(x * 7).toFixed(2)}deg`);
+        el.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`);
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--rx', '0deg');
+      });
+    });
+
+    $$('[data-magnetic]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.18}px, ${y * 0.28}px)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
   }
 
   /* ---------- Даты: не раньше сегодня, выезд после заезда ---------- */
-  const isoDate = (d) => {
-    const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-    return z.toISOString().slice(0, 10);
-  };
+  const isoDate = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const linkDates = (checkIn, checkOut) => {
     if (!checkIn || !checkOut) return;
-    const today = isoDate(new Date());
-    checkIn.min = today;
+    checkIn.min = isoDate(new Date());
     const sync = () => {
       const base = checkIn.value ? new Date(checkIn.value) : new Date();
       base.setDate(base.getDate() + 1);
@@ -114,13 +264,12 @@
 
       out('room').textContent = room ? room.name : '—';
       out('nights').textContent = nights > 0 ? nights : '—';
-
       if (!room || !room.rates.length) {
         out('rate').textContent = '—';
         out('total').textContent = '—';
         return;
       }
-      // Берём тариф, рассчитанный на ближайшее к числу взрослых количество гостей
+      // Тариф, рассчитанный на ближайшее к числу взрослых количество гостей
       const rate = [...room.rates].sort((a, b) => Math.abs(a.guests - adults) - Math.abs(b.guests - adults))[0];
       const price = withMeals ? rate.full : (rate.room || rate.full);
       out('rate').textContent = `${money(price)} (${rate.guests} чел.)`;
@@ -153,7 +302,13 @@
       if (!btn) return;
       $$('[data-filter-value]', filter).forEach((b) => b.classList.toggle('is-active', b === btn));
       const value = btn.dataset.filterValue;
-      items.forEach((item) => { item.hidden = value !== 'all' && item.dataset.category !== value; });
+      items.forEach((item) => {
+        item.hidden = value !== 'all' && item.dataset.category !== value;
+        if (!item.hidden && item.animate && !reduceMotion) {
+          item.animate([{ opacity: 0, transform: 'scale(.94)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'none' }], { duration: 700, easing: 'cubic-bezier(.22,1,.36,1)' });
+        }
+      });
+      if (lenis) lenis.resize();
     });
   }
 
@@ -185,11 +340,11 @@
       group = $$('[data-lightbox]', root).filter((a) => !a.hidden);
       show(group.indexOf(link));
       box.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+      lockScroll(true);
     };
     const close = () => {
       box.classList.remove('is-open');
-      document.body.style.overflow = '';
+      lockScroll(false);
     };
 
     links.forEach((link) => link.addEventListener('click', (e) => { e.preventDefault(); open(link); }));
@@ -211,23 +366,4 @@
     $('.toast__close', toast)?.addEventListener('click', hide);
     setTimeout(hide, 7000);
   });
-
-  /* ---------- Появление при скролле ---------- */
-  const reveals = $$('.reveal');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    reveals.forEach((el, i) => {
-      el.style.transitionDelay = `${(i % 4) * 70}ms`;
-      io.observe(el);
-    });
-  } else {
-    reveals.forEach((el) => el.classList.add('is-visible'));
-  }
 })();

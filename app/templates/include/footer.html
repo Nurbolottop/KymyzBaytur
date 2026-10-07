@@ -1,10 +1,10 @@
 {% load static %}
 <footer class="footer">
-  <div class="ornament-band" aria-hidden="true"></div>
+  <div class="aurora aurora--footer" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="container footer__grid">
     <div class="footer__about">
       <a class="brand brand--light" href="{% url 'home' %}">
-        <img class="brand__logo" src="{% static 'img/logo-light.png' %}" alt="" width="52" height="51">
+        <img class="brand__logo" src="{% static 'img/logo-light.png' %}" alt="" width="46" height="45">
         <span class="brand__text">
           <span class="brand__name">Байтур</span>
           <span class="brand__sub">кымызолечебница</span>
@@ -12,8 +12,8 @@
       </a>
       <p>Натуральный кымыз, горный воздух Суусамыра и тепло кыргызской юрты. Восстанавливаем силы так, как это делали наши предки.</p>
       <div class="footer__social">
-        <a href="{{ site.whatsapp_href }}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="icon"><use href="#i-whatsapp"/></svg></a>
-        {% if site.instagram %}<a href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-instagram"/></svg></a>{% endif %}
+        <a class="icon-btn icon-btn--glass" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="icon"><use href="#i-whatsapp"/></svg></a>
+        {% if site.instagram %}<a class="icon-btn icon-btn--glass" href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-instagram"/></svg></a>{% endif %}
       </div>
     </div>
 
@@ -47,6 +47,9 @@
       </ul>
     </div>
   </div>
+
+  <div class="footer__mark" aria-hidden="true"><span class="mirror">БАЙТУР</span></div>
+
   <div class="container footer__bottom">
     <span>© {% now 'Y' %} {{ site.name }}</span>
     <span>Кымыз дарылоо · Kymyz Therapy</span>
