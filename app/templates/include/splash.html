@@ -1,0 +1,104 @@
+{# Заставка: горы, кони и человек с пиалой кымыза собираются в один медальон #}
+<div class="splash" data-splash aria-hidden="true">
+  <div class="splash__glow"></div>
+  <div class="splash__scene">
+    <svg class="splash__svg" viewBox="0 0 300 300" role="img">
+      <defs>
+        <clipPath id="sp-clip"><circle cx="150" cy="150" r="138"/></clipPath>
+        <linearGradient id="sp-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0a1a45"/>
+          <stop offset=".45" stop-color="#2b4aa8"/>
+          <stop offset=".72" stop-color="#e98a3a"/>
+          <stop offset=".9" stop-color="#ffc56b"/>
+        </linearGradient>
+        <radialGradient id="sp-sun" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#fff3d1"/>
+          <stop offset=".55" stop-color="#ffc25a"/>
+          <stop offset="1" stop-color="#f08c00"/>
+        </radialGradient>
+        <radialGradient id="sp-sunglow" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#ffcf7a" stop-opacity=".75"/>
+          <stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="sp-far" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7183c2"/>
+          <stop offset="1" stop-color="#3d4f93"/>
+        </linearGradient>
+        <linearGradient id="sp-near" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#22397f"/>
+          <stop offset="1" stop-color="#0d1d4f"/>
+        </linearGradient>
+        <linearGradient id="sp-ring" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffcf7a"/>
+          <stop offset=".5" stop-color="#f08c00"/>
+          <stop offset="1" stop-color="#ffb547"/>
+        </linearGradient>
+        <!-- Лошадь в профиль, смотрит вправо. Копыта на y=217 -->
+        <g id="sp-horse">
+          <path d="M84 160 C98 152 126 154 142 152 C150 150 158 138 164 124 C167 118 172 114 177 115 L179 107 L182.5 116 C187 122 191 132 192 139 C192 143 188 145 184 143 C179 141 175 137 172 134 C167 142 160 152 156 164 C154 172 153 178 152 184 L154 216 L149 217 L147 191 L143 191 L144 216 L139 217 L136 189 C124 193 106 193 98 187 C97 195 101 203 99 216 L94 217 L92 203 C91 197 88 193 86 191 L88 216 L83 217 L81 197 C78 187 78 171 84 160 Z"/>
+          <path d="M83 164 C70 172 67 192 73 206" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <path d="M146 151 C154 141 160 129 171 116" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        </g>
+      </defs>
+
+      <g clip-path="url(#sp-clip)">
+        <!-- в сценe координаты 400×260, сдвигаем в медальон -->
+        <g transform="translate(-62 -30) scale(1.2)">
+          <rect x="-60" y="-40" width="520" height="340" fill="url(#sp-sky)"/>
+
+          <g class="sp-stars" fill="#fff">
+            <circle cx="70" cy="10" r="1.2"/><circle cx="130" cy="-2" r=".9"/><circle cx="250" cy="6" r="1.1"/>
+            <circle cx="310" cy="24" r=".8"/><circle cx="190" cy="30" r=".7"/><circle cx="95" cy="40" r=".8"/>
+          </g>
+
+          <g class="sp-sun">
+            <circle cx="178" cy="160" r="70" fill="url(#sp-sunglow)"/>
+            <circle cx="178" cy="160" r="30" fill="url(#sp-sun)"/>
+          </g>
+
+          <g class="sp-far">
+            <path d="M-60 205 L0 150 L40 170 L100 98 L150 152 L200 116 L250 162 L300 112 L360 160 L420 122 L460 205 Z" fill="url(#sp-far)"/>
+            <path d="M88 113 L100 98 L113 114 L106 110 L100 117 L94 110 Z M190 126 L200 116 L211 127 L205 124 L200 129 L195 124 Z M289 125 L300 112 L312 126 L305 122 L300 128 L295 122 Z" fill="#eef3ff"/>
+          </g>
+
+          <g class="sp-near">
+            <path d="M-60 222 Q40 196 120 214 Q200 230 280 208 Q360 192 460 220 L460 300 L-60 300 Z" fill="url(#sp-near)"/>
+          </g>
+
+          <rect class="sp-ground" x="-60" y="217" width="520" height="80" fill="#071436"/>
+
+          <!-- лошадь -->
+          <g class="sp-horse" color="#050f29" fill="#050f29">
+            <use href="#sp-horse" transform="translate(18 0)"/>
+          </g>
+
+          <!-- человек в калпаке с пиалой кымыза -->
+          <g class="sp-person" fill="#050f29">
+           <g transform="translate(-52 0)">
+            <ellipse cx="292" cy="215" rx="26" ry="6"/>
+            <path d="M275 216 C271 196 275 177 284 166 L297 166 C305 177 311 196 313 216 Z"/>
+            <circle cx="290" cy="156" r="8.5"/>
+            <path d="M281.5 150 Q282.5 137 287.5 128.5 Q290 125.5 292.5 128.5 Q297.5 137 298.5 150 Z" fill="#f7f3ec"/>
+            <path d="M281 151 Q290 146.5 299 151 L298.4 145.5 Q290 141.5 281.6 145.5 Z"/>
+            <path d="M290 129.5 L290 144" stroke="#c9c3b8" stroke-width=".8"/>
+            <g class="sp-arm">
+              <path d="M287 169 L273 178 L280 159" fill="none" stroke="#050f29" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M270 152 L290 156 Q286 167 275 163 Z" fill="#f7f3ec"/>
+              <path d="M271 152.4 L289 156" stroke="#ffcf7a" stroke-width="1.2"/>
+            </g>
+           </g>
+          </g>
+        </g>
+      </g>
+
+      <circle class="sp-ring" cx="150" cy="150" r="143" fill="none" stroke="url(#sp-ring)" stroke-width="2.5" pathLength="1"/>
+      <circle class="sp-ring2" cx="150" cy="150" r="138" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="splash__words">
+    <span class="sw sw--1">Горы</span><i></i><span class="sw sw--2">Кони</span><i></i><span class="sw sw--3">Кымыз</span>
+  </div>
+  <div class="splash__title"><small>кымызолечебница · Суусамыр</small><span>Байтур</span></div>
+  <button class="splash__skip" type="button" tabindex="-1" data-splash-skip>Пропустить</button>
+</div>
