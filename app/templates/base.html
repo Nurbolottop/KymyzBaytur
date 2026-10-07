@@ -8,9 +8,9 @@
   <meta property="og:title" content="{% block og_title %}{{ site.name }}{% endblock %}">
   <meta property="og:description" content="Кымызолечение в горах Суусамыра: натуральный кымыз, чистый воздух, юрты и коттеджи.">
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/hero-mountains.jpg' %}">
-  <meta name="theme-color" content="#14306b">
+  <meta name="theme-color" content="#06122e">
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-  <link rel="preload" href="{% static 'fonts/lora-normal-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'fonts/unbounded-normal-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{% static 'fonts/manrope-normal-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
   <style>{% inline_css 'css/style.css' %}</style>
   <script>document.documentElement.classList.add('js')</script>
@@ -24,7 +24,7 @@
     {% if messages %}
       <div class="toast-stack" role="status">
         {% for message in messages %}
-          <div class="toast toast--{{ message.tags }}">
+          <div class="toast glass toast--{{ message.tags }}">
             <svg class="icon"><use href="#i-check"/></svg>
             <span>{{ message }}</span>
             <button class="toast__close" type="button" aria-label="Закрыть">&times;</button>
@@ -41,7 +41,7 @@
     <svg class="icon"><use href="#i-whatsapp"/></svg>
   </a>
 
-  <script src="{% static 'js/main.js' %}?v=6" defer></script>
+  <script src="{% static 'js/main.js' %}?v=7" defer></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

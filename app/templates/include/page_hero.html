@@ -1,13 +1,14 @@
 {% load assets %}
 <section class="page-hero">
-  <div class="page-hero__bg"><img src="{{ image }}" srcset="{{ image|srcset }}" sizes="100vw" alt="" fetchpriority="high"></div>
+  <div class="page-hero__bg" data-parallax="0.25"><img src="{{ image }}" srcset="{{ image|srcset }}" sizes="100vw" alt="" fetchpriority="high"></div>
+  <div class="aurora aurora--hero" aria-hidden="true"><span></span><span></span></div>
   <div class="container page-hero__inner">
-    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+    <nav class="breadcrumbs glass" aria-label="Хлебные крошки">
       <a href="{% url 'home' %}">Главная</a>
-      {% if parent_url %}<span class="breadcrumbs__sep">/</span><a href="{{ parent_url }}">{{ parent_title }}</a>{% endif %}
-      <span class="breadcrumbs__sep">/</span><span aria-current="page">{{ title }}</span>
+      {% if parent_url %}<span class="breadcrumbs__sep"></span><a href="{{ parent_url }}">{{ parent_title }}</a>{% endif %}
+      <span class="breadcrumbs__sep"></span><span aria-current="page">{{ title }}</span>
     </nav>
-    <h1 class="page-hero__title">{{ title }}</h1>
-    {% if subtitle %}<p class="page-hero__subtitle">{{ subtitle }}</p>{% endif %}
+    <h1 class="page-hero__title" data-split>{{ title }}</h1>
+    {% if subtitle %}<p class="page-hero__subtitle reveal">{{ subtitle }}</p>{% endif %}
   </div>
 </section>

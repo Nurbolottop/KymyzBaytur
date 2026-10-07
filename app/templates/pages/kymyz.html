@@ -7,7 +7,7 @@
 {% static 'img/hero-milking.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='Кымызолечение' subtitle='Кымыз дарылоо — древняя кыргызская традиция оздоровления кобыльим молоком.' image=hero_img %}
 
-<section class="section">
+<section class="section section--light">
   <div class="container split">
     <div class="split__content reveal">
       {% include 'include/section_head.html' with eyebrow='Что такое кымыз' title='Напиток, который кочевники называли лекарством' %}
@@ -16,39 +16,41 @@
       <p>Для кыргызов молоко — это святое. Оно используется в обрядах, считается символом чистоты и изобилия и служит основой целебных продуктов — кымыза, курута, чалапа.</p>
     </div>
     <div class="split__media">
-      <img class="split__img reveal" src="{% static 'img/kymyz-pour.webp' %}" srcset="{% static_srcset 'img/kymyz-pour.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз наливают из көөкөра" loading="lazy">
+      <img class="split__img reveal-img" src="{% static 'img/kymyz-pour.webp' %}" srcset="{% static_srcset 'img/kymyz-pour.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз наливают из көөкөра" loading="lazy">
     </div>
   </div>
 </section>
 
-<section class="section section--alt">
+<section class="section section--light">
+  <div class="aurora" aria-hidden="true"><span></span><span></span></div>
   <div class="container">
     {% include 'include/section_head.html' with eyebrow='Польза' title='Чем полезен кымыз' text='Кымыз ценят за мягкое общеукрепляющее действие. Особенно хорошо он работает в сочетании с горным воздухом, покоем и правильным режимом.' center=True %}
     <div class="grid grid--3">
-      <div class="benefit reveal"><span class="benefit__icon"><svg class="icon"><use href="#i-shield"/></svg></span><h3>Иммунитет</h3><p>Витамины группы B, витамин C и микроэлементы помогают организму восстановиться и окрепнуть.</p></div>
-      <div class="benefit reveal"><span class="benefit__icon"><svg class="icon"><use href="#i-leaf"/></svg></span><h3>Пищеварение</h3><p>Живые молочнокислые бактерии и дрожжи поддерживают микрофлору кишечника и улучшают аппетит.</p></div>
-      <div class="benefit reveal"><span class="benefit__icon"><svg class="icon"><use href="#i-mountain"/></svg></span><h3>Дыхание</h3><p>Традиционно кымызолечение применяют для оздоровления дыхательной системы — вместе с чистым горным воздухом.</p></div>
-      <div class="benefit reveal"><span class="benefit__icon"><svg class="icon"><use href="#i-drop"/></svg></span><h3>Кровь и обмен веществ</h3><p>Кобылье молоко ценится как средство при упадке сил и для восстановления после болезней.</p></div>
-      <div class="benefit reveal"><span class="benefit__icon"><svg class="icon"><use href="#i-heart"/></svg></span><h3>Нервная система</h3><p>Тишина долины, прогулки и мягкое действие кымыза помогают снять стресс и наладить сон.</p></div>
-      <div class="benefit reveal"><span class="benefit__icon"><svg class="icon"><use href="#i-sun"/></svg></span><h3>Тонус и энергия</h3><p>Уже через несколько дней гости отмечают прилив сил, лёгкость и хорошее настроение.</p></div>
+      <div class="benefit glass glass--light reveal spot" data-tilt><span class="benefit__icon"><svg class="icon"><use href="#i-shield"/></svg></span><h3>Иммунитет</h3><p>Витамины группы B, витамин C и микроэлементы помогают организму восстановиться и окрепнуть.</p></div>
+      <div class="benefit glass glass--light reveal spot" data-tilt><span class="benefit__icon"><svg class="icon"><use href="#i-leaf"/></svg></span><h3>Пищеварение</h3><p>Живые молочнокислые бактерии и дрожжи поддерживают микрофлору кишечника и улучшают аппетит.</p></div>
+      <div class="benefit glass glass--light reveal spot" data-tilt><span class="benefit__icon"><svg class="icon"><use href="#i-mountain"/></svg></span><h3>Дыхание</h3><p>Традиционно кымызолечение применяют для оздоровления дыхательной системы — вместе с чистым горным воздухом.</p></div>
+      <div class="benefit glass glass--light reveal spot" data-tilt><span class="benefit__icon"><svg class="icon"><use href="#i-drop"/></svg></span><h3>Кровь и обмен веществ</h3><p>Кобылье молоко ценится как средство при упадке сил и для восстановления после болезней.</p></div>
+      <div class="benefit glass glass--light reveal spot" data-tilt><span class="benefit__icon"><svg class="icon"><use href="#i-heart"/></svg></span><h3>Нервная система</h3><p>Тишина долины, прогулки и мягкое действие кымыза помогают снять стресс и наладить сон.</p></div>
+      <div class="benefit glass glass--light reveal spot" data-tilt><span class="benefit__icon"><svg class="icon"><use href="#i-sun"/></svg></span><h3>Тонус и энергия</h3><p>Уже через несколько дней гости отмечают прилив сил, лёгкость и хорошее настроение.</p></div>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="container">
     {% include 'include/section_head.html' with eyebrow='Как проходит курс' title='Ваш день в «Байтур»' center=True %}
     <ol class="steps">
-      <li class="step reveal"><span class="step__num">01</span><h3>Утро</h3><p>Первая пиала свежего кымыза натощак, затем полноценный завтрак.</p></li>
-      <li class="step reveal"><span class="step__num">02</span><h3>День</h3><p>Прогулки по долине, конные прогулки, массаж и процедуры. Кымыз — несколько раз между приёмами пищи.</p></li>
-      <li class="step reveal"><span class="step__num">03</span><h3>Вечер</h3><p>Ужин, баня или горячий чан под звёздами, последняя пиала кымыза перед сном.</p></li>
-      <li class="step reveal"><span class="step__num">04</span><h3>Курс</h3><p>Традиционно — от 10 дней: организм привыкает к кымызу, и эффект становится заметным.</p></li>
+      <li class="step glass glass--light reveal spot"><span class="step__num">01</span><h3>Утро</h3><p>Первая пиала свежего кымыза натощак, затем полноценный завтрак.</p></li>
+      <li class="step glass glass--light reveal spot"><span class="step__num">02</span><h3>День</h3><p>Прогулки по долине, конные прогулки, массаж и процедуры. Кымыз — несколько раз между приёмами пищи.</p></li>
+      <li class="step glass glass--light reveal spot"><span class="step__num">03</span><h3>Вечер</h3><p>Ужин, баня или горячий чан под звёздами, последняя пиала кымыза перед сном.</p></li>
+      <li class="step glass glass--light reveal spot"><span class="step__num">04</span><h3>Курс</h3><p>Традиционно — от 10 дней: организм привыкает к кымызу, и эффект становится заметным.</p></li>
     </ol>
     <p class="note reveal"><svg class="icon"><use href="#i-shield"/></svg>Кымыз — натуральный напиток с небольшим содержанием алкоголя. При хронических заболеваниях, беременности и для детей перед курсом проконсультируйтесь с врачом.</p>
   </div>
 </section>
 
-<section class="section section--dark">
+<section class="section section--night">
+  <div class="aurora aurora--night" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="container split">
     <div class="split__content reveal">
       {% include 'include/section_head.html' with eyebrow='Включено в проживание' title='Пятиразовое кобылье молоко' light=True %}
@@ -63,7 +65,7 @@
       <a class="btn btn--primary" href="{% url 'booking' %}">Забронировать курс</a>
     </div>
     <div class="split__media">
-      <img class="split__img reveal" src="{% static 'img/kymyz-grandma.webp' %}" srcset="{% static_srcset 'img/kymyz-grandma.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз в резной чаре" loading="lazy">
+      <img class="split__img reveal-img" src="{% static 'img/kymyz-grandma.webp' %}" srcset="{% static_srcset 'img/kymyz-grandma.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз в резной чаре" loading="lazy">
     </div>
   </div>
 </section>

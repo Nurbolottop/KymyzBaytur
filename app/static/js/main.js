@@ -4,24 +4,30 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   const lockScroll = (lock) => {
     document.documentElement.style.overflow = lock ? 'hidden' : '';
   };
 
-  /* ---------- Шапка: тень при прокрутке ---------- */
+  /* ---------- Шапка: стекло при скролле, прячется при прокрутке вниз ---------- */
   const header = $('[data-header]');
-  if (header) {
-    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 10);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-  }
+  let lastY = window.scrollY;
+  const onScrollHeader = () => {
+    if (!header) return;
+    const y = window.scrollY;
+    header.classList.toggle('is-scrolled', y > 40);
+    const goingDown = y > lastY && y > 400;
+    if (!document.body.classList.contains('nav-open')) header.classList.toggle('is-hidden', goingDown);
+    lastY = y;
+  };
 
   /* ---------- Мобильное меню ---------- */
   const burger = $('[data-burger]');
   if (burger) {
     const setOpen = (open) => {
       document.body.classList.toggle('nav-open', open);
+      if (open && header) header.classList.remove('is-hidden');
       burger.setAttribute('aria-expanded', String(open));
       lockScroll(open);
     };
@@ -30,7 +36,7 @@
     document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
   }
 
-  /* ---------- Слайдер героя ---------- */
+  /* ---------- Слайдер героя с прогресс-барами ---------- */
   const slider = $('[data-slider]');
   if (slider) {
     const texts = $$('[data-slide]', slider);
@@ -44,16 +50,25 @@
       const dot = document.createElement('button');
       dot.type = 'button';
       dot.className = 'hero__dot';
+      dot.innerHTML = '<i></i>';
       dot.setAttribute('aria-label', `Слайд ${i + 1}`);
       dot.addEventListener('click', () => go(i));
       dotsBox && dotsBox.appendChild(dot);
       return dot;
     });
+    slider.style.setProperty('--slide-ms', `${delay}ms`);
+
+    let started = false;
     const go = (i) => {
+      if (started) [...texts, ...bgs].forEach((el) => el.classList.remove('is-first'));
+      started = true;
       index = (i + texts.length) % texts.length;
       texts.forEach((el, n) => el.classList.toggle('is-active', n === index));
       bgs.forEach((el, n) => el.classList.toggle('is-active', n === index));
-      dots.forEach((dot, n) => dot.classList.toggle('is-active', n === index));
+      dots.forEach((dot, n) => {
+        dot.classList.remove('is-active');
+        if (n === index) { void dot.offsetWidth; dot.classList.add('is-active'); } // перезапуск анимации
+      });
       clearTimeout(timer);
       if (texts.length > 1) timer = setTimeout(() => go(index + 1), delay);
     };
@@ -69,7 +84,7 @@
     go(0);
   }
 
-  /* ---------- Отложенные картинки: data-src грузим позже, чтобы не мешать первому экрану ---------- */
+  /* ---------- Отложенные картинки: не мешают загрузке первого экрана ---------- */
   const loadImg = (img) => {
     if (img.dataset.srcset) img.srcset = img.dataset.srcset;
     if (img.dataset.src) img.src = img.dataset.src;
@@ -88,25 +103,137 @@
   const loadRestSlides = () => setTimeout(() => $$('img[data-slide-bg][data-src]').forEach(loadImg), 1500);
   if (document.readyState === 'complete') loadRestSlides(); else window.addEventListener('load', loadRestSlides);
 
+  /* ---------- Разбивка заголовков на слова для появления ---------- */
+  $$('[data-split]').forEach((el) => {
+    const parts = [];
+    el.childNodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.textContent.split(/(\s+)/).forEach((chunk) => {
+          if (!chunk) return;
+          parts.push(/^\s+$/.test(chunk) ? document.createTextNode(' ') : chunk);
+        });
+      } else {
+        parts.push(node.cloneNode(true));
+      }
+    });
+    el.textContent = '';
+    let i = 0;
+    parts.forEach((part) => {
+      if (part instanceof Node && part.nodeType === Node.TEXT_NODE) { el.appendChild(part); return; }
+      const outer = document.createElement('span');
+      outer.className = 'w';
+      const inner = document.createElement('span');
+      inner.style.transitionDelay = `${i++ * 60}ms`;
+      if (typeof part === 'string') inner.textContent = part; else inner.appendChild(part);
+      outer.appendChild(inner);
+      el.appendChild(outer);
+    });
+  });
+
   /* ---------- Появление при скролле ---------- */
-  const revealEls = $$('.reveal');
+  const revealEls = $$('.reveal, .reveal-img, [data-split]');
   if ('IntersectionObserver' in window && !reduceMotion) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
+        const el = entry.target;
+        el.classList.add('is-visible');
+        if (el.hasAttribute('data-tilt')) setTimeout(() => el.classList.add('tilt-ready'), 1200);
+        io.unobserve(el);
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
     revealEls.forEach((el) => {
-      // соседние карточки появляются одна за другой
-      const siblings = el.parentElement ? [...el.parentElement.children].filter((c) => c.matches('.reveal')) : [];
+      const siblings = el.parentElement ? [...el.parentElement.children].filter((c) => c.matches('.reveal, .reveal-img')) : [];
       const pos = siblings.indexOf(el);
-      if (pos > 0) el.style.transitionDelay = `${Math.min(pos, 4) * 80}ms`;
+      if (pos > 0) el.style.transitionDelay = `${Math.min(pos, 5) * 90}ms`;
       io.observe(el);
     });
   } else {
-    revealEls.forEach((el) => el.classList.add('is-visible'));
+    revealEls.forEach((el) => el.classList.add('is-visible', 'tilt-ready'));
+  }
+
+  /* ---------- Счётчики ---------- */
+  const counters = $$('[data-count]');
+  if (counters.length && 'IntersectionObserver' in window) {
+    const co = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseFloat(el.dataset.count);
+        const start = performance.now();
+        const dur = 1600;
+        const tick = (now) => {
+          const p = Math.min((now - start) / dur, 1);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        if (!reduceMotion) { el.textContent = '0'; requestAnimationFrame(tick); }
+        co.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach((el) => co.observe(el));
+  }
+
+  /* ---------- Параллакс ---------- */
+  const parallaxEls = $$('[data-parallax]');
+  let ticking = false;
+  const updateParallax = () => {
+    const vh = window.innerHeight;
+    parallaxEls.forEach((el) => {
+      const rect = el.parentElement.getBoundingClientRect();
+      if (rect.bottom < -100 || rect.top > vh + 100) return;
+      const speed = parseFloat(el.dataset.parallax) || 0.2;
+      const offset = (rect.top + rect.height / 2 - vh / 2) * speed * -1;
+      el.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+    });
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    onScrollHeader();
+    if (!ticking && parallaxEls.length && finePointer && !reduceMotion) {
+      ticking = true;
+      requestAnimationFrame(updateParallax);
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------- Подсветка под курсором, 3D-наклон, магнитные кнопки ---------- */
+  if (finePointer && !reduceMotion) {
+    document.addEventListener('pointermove', (e) => {
+      const spot = e.target.closest('.spot');
+      if (spot) {
+        const r = spot.getBoundingClientRect();
+        spot.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        spot.style.setProperty('--my', `${e.clientY - r.top}px`);
+      }
+    }, { passive: true });
+
+    $$('[data-tilt]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.setProperty('--ry', `${(x * 7).toFixed(2)}deg`);
+        el.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`);
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--rx', '0deg');
+      });
+    });
+
+    $$('[data-magnetic]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.18}px, ${y * 0.28}px)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
   }
 
   /* ---------- Даты: не раньше сегодня, выезд после заезда ---------- */
