@@ -3,7 +3,7 @@
 {% block title %}О нас — {{ site.name }}{% endblock %}
 
 {% block content %}
-{% static 'img/hero-valley.jpg' as hero_img %}
+{% static 'img/hero-valley.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='О нас' subtitle='Кымызолечебница в Суусамырской долине — там, где начинается настоящий отдых.' image=hero_img %}
 
 <section class="section section--light">
@@ -15,8 +15,8 @@
       <p>Многие гости возвращаются к нам каждый год — и привозят с собой друзей. Для нас это лучшая оценка.</p>
     </div>
     <div class="split__media">
-      <img class="split__img reveal-img" src="{% static 'img/guest-girl.jpg' %}" alt="Лето в Суусамыре" loading="lazy">
-      <img class="split__img split__img--small reveal-img mirror-img" src="{% static 'img/yurt-ceiling.jpg' %}" alt="Тундук большой юрты" loading="lazy">
+      <img class="split__img reveal-img" src="{% static 'img/guest-girl.webp' %}" alt="Лето в Суусамыре" loading="lazy">
+      <img class="split__img split__img--small reveal-img mirror-img" src="{% static 'img/yurt-ceiling.webp' %}" alt="Тундук большой юрты" loading="lazy">
     </div>
   </div>
 </section>
