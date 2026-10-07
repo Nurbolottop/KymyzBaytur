@@ -6,12 +6,6 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  /* ---------- Прелоадер ---------- */
-  const hidePreloader = () => document.documentElement.classList.add('is-loaded');
-  if (document.readyState === 'complete') hidePreloader();
-  else window.addEventListener('load', hidePreloader);
-  setTimeout(hidePreloader, 1800); // не держим дольше, даже если картинки грузятся
-
   /* ---------- Плавный инерционный скролл (Lenis) ---------- */
   let lenis = null;
   if (window.Lenis && !reduceMotion) {
@@ -22,6 +16,33 @@
     if (lenis) lock ? lenis.stop() : lenis.start();
     document.body.style.overflow = lock ? 'hidden' : '';
   };
+
+  /* ---------- Заставка: показываем один раз за сессию ---------- */
+  const splash = $('[data-splash]');
+  const root = document.documentElement;
+  if (splash && root.classList.contains('splash-active')) {
+    try { sessionStorage.setItem('kymyz-splash', '1'); } catch (e) { /* приватный режим */ }
+    lockScroll(true);
+    const started = performance.now();
+    const minShow = 3600; // столько длится сцена
+    let done = false;
+    const leave = () => {
+      if (done) return;
+      done = true;
+      splash.classList.add('is-leaving');
+      root.classList.remove('splash-active');
+      lockScroll(false);
+      setTimeout(() => splash.remove(), 1200);
+    };
+    const leaveWhenReady = () => setTimeout(leave, Math.max(0, minShow - (performance.now() - started)));
+    if (document.readyState === 'complete') leaveWhenReady();
+    else window.addEventListener('load', leaveWhenReady);
+    setTimeout(leave, 6000); // страховка, если какая-то картинка грузится вечно
+    splash.addEventListener('click', leave);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' || e.key === 'Enter') leave(); }, { once: true });
+  } else if (splash) {
+    splash.remove();
+  }
 
   /* ---------- Шапка: стекло при скролле, прячется при прокрутке вниз ---------- */
   const header = $('[data-header]');
