@@ -1,0 +1,48 @@
+{% load static %}<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.name }} — кымызолечение в Суусамыре{% endblock %}</title>
+  <meta name="description" content="{% block description %}Кымызолечебница «Байтур» в Суусамырской долине: натуральный кымыз, юрты и коттеджи, трёхразовое питание, баня и массаж. 3 часа от Бишкека.{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ site.name }}{% endblock %}">
+  <meta property="og:description" content="Кымызолечение в горах Суусамыра: натуральный кымыз, чистый воздух, юрты и коттеджи.">
+  <meta property="og:image" content="{% static 'img/hero-mountains.jpg' %}">
+  <meta name="theme-color" content="#0d3a99">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script>document.documentElement.classList.add('js')</script>
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% include 'include/icons.html' %}
+  {% include 'include/header.html' %}
+
+  <main id="main">
+    {% if messages %}
+      <div class="toast-stack" role="status">
+        {% for message in messages %}
+          <div class="toast toast--{{ message.tags }}">
+            <svg class="icon"><use href="#i-check"/></svg>
+            <span>{{ message }}</span>
+            <button class="toast__close" type="button" aria-label="Закрыть">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'include/footer.html' %}
+
+  <a class="wa-float" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener" aria-label="Написать в WhatsApp">
+    <svg class="icon"><use href="#i-whatsapp"/></svg>
+  </a>
+
+  <script src="{% static 'js/main.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     # Third-party
     'ckeditor',
@@ -86,6 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.base.context_processors.site_settings',
             ],
         },
     },
@@ -105,6 +107,15 @@ DATABASES = {
         'PORT': int(os.getenv('POSTGRES_PORT', 5432)),
     }
 }
+
+# Локальный запуск без Docker: USE_SQLITE=1 python manage.py runserver
+if os.getenv('USE_SQLITE') == '1':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # =============================================================================
 # PASSWORD VALIDATION (ВАЛИДАЦИЯ ПАРОЛЕЙ)
@@ -170,3 +181,12 @@ CKEDITOR_CONFIGS = {
         'width': '100%',
     },
 }
+
+
+# =============================================================================
+# TELEGRAM (УВЕДОМЛЕНИЯ О ЗАЯВКАХ)
+# =============================================================================
+# Если оба значения заданы — новые заявки на бронь и сообщения
+# дублируются в Telegram. Пустые значения = уведомления выключены.
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '')

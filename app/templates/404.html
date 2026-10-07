@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Страница не найдена — {{ site.name }}{% endblock %}
+
+{% block content %}
+<section class="section success">
+  <div class="container container--narrow center">
+    <span class="success__code">404</span>
+    <h1 class="section-title">Такой страницы нет</h1>
+    <p class="section-text">Возможно, она переехала. Зато горы Суусамыра на месте.</p>
+    <div class="btn-row btn-row--center">
+      <a class="btn btn--primary" href="{% url 'home' %}">На главную</a>
+      <a class="btn btn--outline" href="{% url 'rooms' %}">Номера</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

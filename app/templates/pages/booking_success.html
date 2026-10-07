@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Заявка отправлена — {{ site.name }}{% endblock %}
+
+{% block content %}
+<section class="section success">
+  <div class="container container--narrow center">
+    <span class="success__icon"><svg class="icon"><use href="#i-check"/></svg></span>
+    <h1 class="section-title">Спасибо! Заявка отправлена</h1>
+    <p class="section-text">Менеджер свяжется с вами в ближайшее время, чтобы подтвердить бронь. Если хотите ускорить — напишите нам в WhatsApp.</p>
+    <div class="btn-row btn-row--center">
+      <a class="btn btn--primary" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-whatsapp"/></svg>Написать в WhatsApp</a>
+      <a class="btn btn--outline" href="{% url 'home' %}">На главную</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

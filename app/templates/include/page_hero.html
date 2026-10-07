@@ -1,0 +1,11 @@
+<section class="page-hero" style="--bg:url('{{ image }}')">
+  <div class="container page-hero__inner">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="{% url 'home' %}">Главная</a>
+      {% if parent_url %}<span>/</span><a href="{{ parent_url }}">{{ parent_title }}</a>{% endif %}
+      <span>/</span><span aria-current="page">{{ title }}</span>
+    </nav>
+    <h1 class="page-hero__title">{{ title }}</h1>
+    {% if subtitle %}<p class="page-hero__subtitle">{{ subtitle }}</p>{% endif %}
+  </div>
+</section>

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Контакты — {{ site.name }}{% endblock %}
+
+{% block content %}
+{% static 'img/transfer.jpg' as hero_img %}
+{% include 'include/page_hero.html' with title='Контакты' subtitle=site.address_note image=hero_img %}
+
+<section class="section">
+  <div class="container contacts">
+    <div class="contacts__info">
+      <div class="contact-item reveal">
+        <span class="contact-item__icon"><svg class="icon"><use href="#i-phone"/></svg></span>
+        <div><h3>Телефон / WhatsApp</h3><a href="{{ site.phone_href }}">{{ site.phone }}</a>{% if site.phone_2 %}<br><a href="{{ site.phone_2_href }}">{{ site.phone_2 }}</a>{% endif %}<small>{{ site.working_hours }}</small></div>
+      </div>
+      <div class="contact-item reveal">
+        <span class="contact-item__icon"><svg class="icon"><use href="#i-pin"/></svg></span>
+        <div><h3>Адрес</h3><p>{{ site.address }}</p>{% if site.map_link %}<a href="{{ site.map_link }}" target="_blank" rel="noopener">Открыть маршрут в 2GIS →</a>{% endif %}</div>
+      </div>
+      <div class="contact-item reveal">
+        <span class="contact-item__icon"><svg class="icon"><use href="#i-sun"/></svg></span>
+        <div><h3>Сезон</h3><p>{{ site.season }}</p></div>
+      </div>
+      {% if site.instagram %}
+      <div class="contact-item reveal">
+        <span class="contact-item__icon"><svg class="icon"><use href="#i-instagram"/></svg></span>
+        <div><h3>Instagram</h3><a href="{{ site.instagram }}" target="_blank" rel="noopener">@kymyz_baytur_resort</a></div>
+      </div>
+      {% endif %}
+      <div class="btn-row reveal">
+        <a class="btn btn--primary" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-whatsapp"/></svg>Написать в WhatsApp</a>
+        <a class="btn btn--outline" href="{% url 'booking' %}">Забронировать</a>
+      </div>
+    </div>
+
+    <form class="form-card reveal" method="post" novalidate>
+      {% csrf_token %}
+      <h2 class="h3">Задать вопрос</h2>
+      <p class="form-card__hint">Оставьте номер — перезвоним или напишем в WhatsApp.</p>
+      {% include 'include/form_field.html' with field=form.name %}
+      {% include 'include/form_field.html' with field=form.phone %}
+      {% include 'include/form_field.html' with field=form.message %}
+      <button class="btn btn--primary btn--block" type="submit">Отправить</button>
+    </form>
+  </div>
+</section>
+
+<section class="section section--cream">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Трансфер' title='Как добраться до Суусамыра' text='Комфортный минивэн Hyundai Grand Starex на 8 мест. Безопасно и круглосуточно.' center=True %}
+    <div class="grid grid--3">
+      <div class="route-card reveal"><span class="route-card__from">Бишкек</span><svg class="icon"><use href="#i-arrow"/></svg><span class="route-card__to">Суусамыр</span><strong>10 000 сом</strong><small>в одну сторону · туда-обратно 18 000 сом</small></div>
+      <div class="route-card reveal"><span class="route-card__from">Граница Ак-Жол</span><svg class="icon"><use href="#i-arrow"/></svg><span class="route-card__to">Суусамыр</span><strong>8 000 сом</strong><small>в одну сторону · туда-обратно 16 600 сом</small></div>
+      <div class="route-card reveal"><span class="route-card__from">Граница Чалдовар</span><svg class="icon"><use href="#i-arrow"/></svg><span class="route-card__to">Суусамыр</span><strong>6 000 сом</strong><small>в одну сторону · туда-обратно 12 000 сом</small></div>
+    </div>
+    {% if site.map_embed %}
+      <div class="map map--wide mt-32 reveal"><iframe src="{{ site.map_embed }}" title="Карта: Суусамыр" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

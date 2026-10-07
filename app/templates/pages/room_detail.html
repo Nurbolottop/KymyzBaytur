@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}{{ room.name }} — {{ site.name }}{% endblock %}
+{% block description %}{{ room.short_description }}{% endblock %}
+
+{% block content %}
+{% url 'rooms' as rooms_url %}
+{% include 'include/page_hero.html' with title=room.name subtitle=room.short_description image=room.image_url parent_url=rooms_url parent_title='Номера' %}
+
+<section class="section">
+  <div class="container room-detail">
+    <div class="room-detail__main">
+      <div class="room-gallery" data-lightbox-group>
+        <a class="room-gallery__main" href="{{ room.image_url }}" data-lightbox data-caption="{{ room.name }}">
+          <img src="{{ room.image_url }}" alt="{{ room.name }}">
+        </a>
+        {% if room.photos.all|length > 1 %}
+          <div class="room-gallery__thumbs">
+            {% for photo in room.photos.all %}{% if not forloop.first %}
+              <a href="{{ photo.image_url }}" data-lightbox data-caption="{{ room.name }}"><img src="{{ photo.image_url }}" alt="" loading="lazy"></a>
+            {% endif %}{% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="prose reveal">
+        <span class="tag">{{ room.get_kind_display }}</span>
+        <h2>Об этом номере</h2>
+        {{ room.description|linebreaks }}
+      </div>
+
+      <div class="reveal">
+        <h2 class="h3">Удобства</h2>
+        <ul class="amenities">
+          <li><svg class="icon"><use href="#i-users"/></svg>до {{ room.capacity }} гостей</li>
+          <li><svg class="icon"><use href="#i-bed"/></svg>{{ room.beds }}</li>
+          {% for item in room.amenities_list %}<li><svg class="icon"><use href="#i-check"/></svg>{{ item }}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <aside class="room-detail__aside">
+      <div class="booking-card">
+        <h2 class="h3">Стоимость за сутки</h2>
+        <table class="rate-table">
+          <thead><tr><th>Гостей</th><th>С питанием<br>и кымызом</th><th>Без питания</th></tr></thead>
+          <tbody>
+            {% for rate in room.rates.all %}
+              <tr>
+                <td>{{ rate.guests }}</td>
+                <td><strong>{{ rate.price_full|intcomma }} сом</strong></td>
+                <td>{% if rate.price_room_only %}{{ rate.price_room_only|intcomma }} сом{% else %}—{% endif %}</td>
+              </tr>
+              {% if rate.note %}<tr class="rate-table__note"><td colspan="3">{{ rate.note }}</td></tr>{% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="booking-card__hint">Дети до 6 лет включительно — бесплатно.</p>
+        <a class="btn btn--primary btn--block btn--lg" href="{% url 'booking' %}?room={{ room.slug }}">Забронировать</a>
+        <a class="btn btn--outline btn--block" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-whatsapp"/></svg>Спросить в WhatsApp</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+{% if others %}
+<section class="section section--cream">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Ещё варианты' title='Другие номера' %}
+    <div class="grid grid--3">{% for room in others %}{% include 'include/room_card.html' %}{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
