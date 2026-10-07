@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+<section class="hero" data-slider>
+  {% for slide in slides %}
+    <div class="hero__slide{% if forloop.first %} is-active{% endif %}" data-slide>
+      <img class="hero__bg" src="{{ slide.image_url }}" alt="" {% if not forloop.first %}loading="lazy"{% endif %}>
+      <div class="container hero__content">
+        {% if slide.eyebrow %}<span class="hero__eyebrow">{{ slide.eyebrow }}</span>{% endif %}
+        {% if forloop.first %}<h1 class="hero__title">{{ slide.title }}</h1>{% else %}<p class="hero__title">{{ slide.title }}</p>{% endif %}
+        {% if slide.subtitle %}<p class="hero__subtitle">{{ slide.subtitle }}</p>{% endif %}
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="{% url 'booking' %}">Забронировать</a>
+          <a class="btn btn--ghost btn--lg" href="{% url 'kymyz' %}">О кымызолечении</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  {% if slides|length > 1 %}
+    <div class="hero__controls container">
+      <button class="hero__arrow" type="button" data-prev aria-label="Предыдущий слайд"><svg class="icon"><use href="#i-chevron-left"/></svg></button>
+      <div class="hero__dots" data-dots></div>
+      <button class="hero__arrow" type="button" data-next aria-label="Следующий слайд"><svg class="icon"><use href="#i-chevron-right"/></svg></button>
+    </div>
+  {% endif %}
+</section>
+
+<div class="container">
+  <form class="booking-bar reveal" action="{% url 'booking' %}" method="get" data-booking-bar>
+    <label class="booking-bar__field">
+      <span><svg class="icon"><use href="#i-calendar"/></svg>Заезд</span>
+      <input type="date" name="check_in" required>
+    </label>
+    <label class="booking-bar__field">
+      <span><svg class="icon"><use href="#i-calendar"/></svg>Выезд</span>
+      <input type="date" name="check_out" required>
+    </label>
+    <label class="booking-bar__field booking-bar__field--sm">
+      <span><svg class="icon"><use href="#i-users"/></svg>Взрослые</span>
+      <input type="number" name="adults" value="2" min="1" max="20">
+    </label>
+    <label class="booking-bar__field booking-bar__field--sm">
+      <span><svg class="icon"><use href="#i-users"/></svg>Дети</span>
+      <input type="number" name="children" value="0" min="0" max="20">
+    </label>
+    <button class="btn btn--primary btn--lg booking-bar__submit" type="submit">Найти номер</button>
+  </form>
+</div>
+
+<section class="section">
+  <div class="container features">
+    <div class="feature reveal">
+      <span class="feature__icon"><svg class="icon"><use href="#i-cup"/></svg></span>
+      <h3>Натуральный кымыз</h3>
+      <p>Пятиразовое кобылье молоко — свежий кымыз и саамал от наших кобылиц каждый день.</p>
+    </div>
+    <div class="feature reveal">
+      <span class="feature__icon"><svg class="icon"><use href="#i-mountain"/></svg></span>
+      <h3>Горный воздух</h3>
+      <p>Суусамырская долина — высокогорье, прохлада летом, альпийские луга и чистейшие реки.</p>
+    </div>
+    <div class="feature reveal">
+      <span class="feature__icon"><svg class="icon"><use href="#i-fire"/></svg></span>
+      <h3>Трёхразовое питание</h3>
+      <p>Полноценное домашнее питание уже включено в стоимость проживания.</p>
+    </div>
+    <div class="feature reveal">
+      <span class="feature__icon"><svg class="icon"><use href="#i-yurt"/></svg></span>
+      <h3>Юрты и коттеджи</h3>
+      <p>Номера «Стандарт», «Полулюкс», «Люкс» и настоящие кыргызские юрты.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--cream">
+  <div class="container split">
+    <div class="split__media reveal">
+      <img class="split__img" src="{% static 'img/kymyz-pour.jpg' %}" alt="Свежий кымыз из кожаного көөкөра" loading="lazy">
+      <img class="split__img split__img--small" src="{% static 'img/yurt-camp.jpg' %}" alt="Юрты комплекса «Байтур»" loading="lazy">
+    </div>
+    <div class="split__content reveal">
+      {% include 'include/section_head.html' with eyebrow='О нас' title='Кымызолечебница «Байтур» в сердце Суусамыра' %}
+      <p>Мы встречаем гостей в Суусамырской долине — там, где горы, альпийские луга и табуны лошадей создают ту самую атмосферу кочевой жизни. Здесь можно отдохнуть от городской жары, выспаться под шум ветра и пройти курс кымызолечения.</p>
+      <p>Для кыргызского народа молоко — это святое: символ чистоты и изобилия, основа целебных продуктов — кымыза, курута, чалапа. Мы бережно сохраняем эти традиции и делимся ими с вами.</p>
+      <ul class="stats">
+        <li><strong>3 ч</strong><span>от Бишкека</span></li>
+        <li><strong>5 раз</strong><span>кобылье молоко в день</span></li>
+        <li><strong>10 мин</strong><span>до реки Кокомерен</span></li>
+      </ul>
+      <a class="btn btn--outline" href="{% url 'about' %}">Подробнее о комплексе <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--blue kymyz-teaser">
+  <div class="container split split--reverse">
+    <div class="split__media reveal">
+      <img class="split__img" src="{% static 'img/kymyz-grandma.jpg' %}" alt="Кымыз в деревянной чаре" loading="lazy">
+    </div>
+    <div class="split__content reveal">
+      {% include 'include/section_head.html' with eyebrow='Кымызолечение' title='Почему кымыз называют напитком здоровья' light=True %}
+      <ul class="check-list check-list--light">
+        <li><svg class="icon"><use href="#i-check"/></svg>Поддерживает иммунитет и помогает восстановить силы</li>
+        <li><svg class="icon"><use href="#i-check"/></svg>Богат витаминами, микроэлементами и живыми молочнокислыми бактериями</li>
+        <li><svg class="icon"><use href="#i-check"/></svg>Традиционно применяется для оздоровления дыхательной и пищеварительной систем</li>
+        <li><svg class="icon"><use href="#i-check"/></svg>В сочетании с горным воздухом и режимом дня даёт заметный эффект уже за курс</li>
+      </ul>
+      <a class="btn btn--primary" href="{% url 'kymyz' %}">Узнать о кымызолечении <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-row">
+      {% include 'include/section_head.html' with eyebrow='Проживание' title='Номера и юрты' text='Во все тарифы включены трёхразовое питание и пятиразовое кобылье молоко.' %}
+      <a class="btn btn--outline section-row__btn" href="{% url 'rooms' %}">Все номера <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="grid grid--3">
+      {% for room in rooms %}{% include 'include/room_card.html' %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-row">
+      {% include 'include/section_head.html' with eyebrow='Услуги' title='Чем заняться кроме кымыза' %}
+      <a class="btn btn--outline section-row__btn" href="{% url 'services' %}">Все услуги <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="grid grid--3">
+      {% for service in services %}
+        <a class="service-card reveal" href="{% url 'services' %}#{{ service.slug }}">
+          <img src="{{ service.image_url }}" alt="{{ service.name }}" loading="lazy">
+          <div class="service-card__body">
+            <span class="service-card__icon"><svg class="icon"><use href="#i-{{ service.icon }}"/></svg></span>
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if promos %}
+<section class="section">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Спецпредложения' title='Акции' %}
+    <div class="grid grid--2">
+      {% for promo in promos %}
+        <article class="promo reveal">
+          <img src="{{ promo.image_url }}" alt="" loading="lazy">
+          <div class="promo__body">
+            {% if promo.badge %}<span class="promo__badge">{{ promo.badge }}</span>{% endif %}
+            <h3>{{ promo.title }}</h3>
+            <p>{{ promo.text }}</p>
+            {% if promo.valid_until %}<span class="promo__date">до {{ promo.valid_until|date:'j E' }}</span>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if reviews %}
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-row">
+      {% include 'include/section_head.html' with eyebrow='Отзывы' title='Гости возвращаются каждый год' %}
+      <a class="btn btn--outline section-row__btn" href="{% url 'reviews' %}">Все отзывы <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="grid grid--3">
+      {% for review in reviews|slice:':3' %}
+        <figure class="review reveal">
+          <svg class="review__quote"><use href="#i-quote"/></svg>
+          <div class="stars" aria-label="Оценка {{ review.rating }} из 5">{% for i in '12345' %}<svg class="icon{% if forloop.counter > review.rating %} is-off{% endif %}"><use href="#i-star"/></svg>{% endfor %}</div>
+          <blockquote>{{ review.text }}</blockquote>
+          <figcaption><strong>{{ review.name }}</strong>{% if review.city %} · {{ review.city }}{% endif %}<span>{{ review.source }}</span></figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="section-row">
+      {% include 'include/section_head.html' with eyebrow='Галерея' title='Жизнь в Суусамыре' %}
+      <a class="btn btn--outline section-row__btn" href="{% url 'gallery' %}">Вся галерея <svg class="icon"><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="mosaic" data-lightbox-group>
+      {% for photo in gallery %}
+        <a class="mosaic__item reveal" href="{{ photo.image_url }}" data-lightbox data-caption="{{ photo.title }}">
+          <img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy">
+        </a>
+      {% endfor %}
+    </div>
+    {% if site.instagram %}
+      <div class="center mt-32">
+        <a class="btn btn--outline" href="{{ site.instagram }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-instagram"/></svg>Больше в Instagram</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section section--cream">
+  <div class="container split">
+    <div class="split__content reveal">
+      {% include 'include/section_head.html' with eyebrow='Как добраться' title='Всего 3 часа от Бишкека' %}
+      <p>{{ site.address }}. В 10 минутах — одна из самых красивых горных рек Кыргызстана, Кокомерен.</p>
+      <ul class="route-list">
+        <li><svg class="icon"><use href="#i-car"/></svg><div><strong>Трансфер из Бишкека</strong><span>10 000 сом в одну сторону · минивэн Grand Starex на 8 мест</span></div></li>
+        <li><svg class="icon"><use href="#i-shield"/></svg><div><strong>От границ Ак-Жол и Чалдовар</strong><span>8 000 и 6 000 сом в одну сторону</span></div></li>
+        <li><svg class="icon"><use href="#i-pin"/></svg><div><strong>На своей машине</strong><span>Трасса Бишкек — Ош через перевал Тоо-Ашуу</span></div></li>
+      </ul>
+      <div class="btn-row">
+        {% if site.map_link %}<a class="btn btn--primary" href="{{ site.map_link }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-pin"/></svg>Открыть в 2GIS</a>{% endif %}
+        <a class="btn btn--outline" href="{% url 'contacts' %}">Контакты</a>
+      </div>
+    </div>
+    <div class="map reveal">
+      {% if site.map_embed %}<iframe src="{{ site.map_embed }}" title="Карта: Суусамыр" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>{% endif %}
+    </div>
+  </div>
+</section>
+
+{% include 'include/cta.html' %}
+{% endblock %}

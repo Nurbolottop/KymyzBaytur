@@ -1,0 +1,12 @@
+{% load static %}
+<section class="cta" style="--bg:url('{% static 'img/yurt-window.jpg' %}')">
+  <div class="container cta__inner reveal">
+    <span class="eyebrow eyebrow--light"><svg class="icon"><use href="#i-ornament"/></svg>Сезон кымыза ждёт</span>
+    <h2 class="cta__title">Забронируйте отдых в Суусамыре</h2>
+    <p class="cta__text">Оставьте заявку — мы подтвердим даты, подберём номер или юрту и при необходимости организуем трансфер.</p>
+    <div class="cta__actions">
+      <a class="btn btn--primary btn--lg" href="{% url 'booking' %}">Оставить заявку</a>
+      <a class="btn btn--ghost btn--lg" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-whatsapp"/></svg>Написать в WhatsApp</a>
+    </div>
+  </div>
+</section>

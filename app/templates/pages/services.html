@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Услуги — {{ site.name }}{% endblock %}
+
+{% block content %}
+{% static 'img/chan.jpg' as hero_img %}
+{% include 'include/page_hero.html' with title='Услуги' subtitle='Массаж, баня, конные прогулки, банкеты в юрте и трансфер до Суусамыра.' image=hero_img %}
+
+<section class="section">
+  <div class="container">
+    <nav class="chips reveal" aria-label="Категории услуг">
+      {% for category in categories %}<a class="chip" href="#{{ category.slug }}"><svg class="icon"><use href="#i-{{ category.icon }}"/></svg>{{ category.name }}</a>{% endfor %}
+    </nav>
+
+    {% for category in categories %}
+      <article class="service-block{% cycle '' ' service-block--reverse' %}" id="{{ category.slug }}">
+        <div class="service-block__media reveal">
+          <img src="{{ category.image_url }}" alt="{{ category.name }}" loading="lazy">
+        </div>
+        <div class="service-block__body reveal">
+          <span class="service-card__icon"><svg class="icon"><use href="#i-{{ category.icon }}"/></svg></span>
+          <h2 class="section-title">{{ category.name }}</h2>
+          {% if category.description %}<p class="section-text">{{ category.description }}</p>{% endif %}
+          <ul class="price-list">
+            {% for item in category.items.all %}
+              <li>
+                <span class="price-list__name">{{ item.name }}{% if item.duration or item.note %}<small>{{ item.duration }}{% if item.duration and item.note %} · {% endif %}{{ item.note }}</small>{% endif %}</span>
+                <span class="price-list__dots"></span>
+                <span class="price-list__price">{{ item.price }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% if promos %}
+<section class="section section--cream">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Спецпредложения' title='Акции' %}
+    <div class="grid grid--2">
+      {% for promo in promos %}
+        <article class="promo reveal">
+          <img src="{{ promo.image_url }}" alt="" loading="lazy">
+          <div class="promo__body">
+            {% if promo.badge %}<span class="promo__badge">{{ promo.badge }}</span>{% endif %}
+            <h3>{{ promo.title }}</h3>
+            <p>{{ promo.text }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include 'include/cta.html' %}
+{% endblock %}

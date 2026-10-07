@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Галерея — {{ site.name }}{% endblock %}
+
+{% block content %}
+{% static 'img/yurt-camp.jpg' as hero_img %}
+{% include 'include/page_hero.html' with title='Галерея' subtitle='Горы, юрты, табуны и свежий кымыз — посмотрите, как отдыхают в «Байтур».' image=hero_img %}
+
+<section class="section">
+  <div class="container">
+    <div class="chips chips--center reveal" data-filter>
+      <button class="chip is-active" type="button" data-filter-value="all">Все</button>
+      {% for value, label in categories %}<button class="chip" type="button" data-filter-value="{{ value }}">{{ label }}</button>{% endfor %}
+    </div>
+    <div class="gallery-grid" data-lightbox-group>
+      {% for photo in images %}
+        <a class="gallery-grid__item" href="{{ photo.image_url }}" data-lightbox data-category="{{ photo.category }}" data-caption="{{ photo.title }}">
+          <img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy">
+          {% if photo.title %}<span class="gallery-grid__caption">{{ photo.title }}</span>{% endif %}
+        </a>
+      {% endfor %}
+    </div>
+    {% if site.instagram %}
+      <div class="center mt-32"><a class="btn btn--outline" href="{{ site.instagram }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-instagram"/></svg>Ещё больше фото в Instagram</a></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

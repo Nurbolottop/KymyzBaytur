@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}О нас — {{ site.name }}{% endblock %}
+
+{% block content %}
+{% static 'img/hero-valley.jpg' as hero_img %}
+{% include 'include/page_hero.html' with title='О нас' subtitle='Кымызолечебница в Суусамырской долине — там, где начинается настоящий отдых.' image=hero_img %}
+
+<section class="section">
+  <div class="container split">
+    <div class="split__content reveal">
+      {% include 'include/section_head.html' with eyebrow='Наша история' title='Традиции кочевников и забота о здоровье' %}
+      <p>«Байтур» — это кымызолечебница и зона отдыха среди гор Суусамыра. Сюда приезжают семьями и компаниями, чтобы сбежать от городской жары, подышать чистым горным воздухом и пройти курс кымызолечения — так, как это веками делали кыргызы.</p>
+      <p>Каждый день наши гости получают свежее кобылье молоко, саамал и кымыз, трёхразовое домашнее питание и спокойствие, которого так не хватает в городе. А вокруг — альпийские луга, табуны лошадей, юрты и бескрайнее небо.</p>
+      <p>Многие гости возвращаются к нам каждый год — и привозят с собой друзей. Для нас это лучшая оценка.</p>
+    </div>
+    <div class="split__media reveal">
+      <img class="split__img" src="{% static 'img/guest-girl.jpg' %}" alt="Лето в Суусамыре" loading="lazy">
+      <img class="split__img split__img--small" src="{% static 'img/yurt-ceiling.jpg' %}" alt="Тундук большой юрты" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="section section--blue">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Почему «Байтур»' title='Всё для отдыха и оздоровления' light=True center=True %}
+    <div class="grid grid--4">
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-cup"/></svg></span><h3>Свой кымыз</h3><p>Кобылье молоко от собственных кобылиц — пять раз в день, включено в проживание.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-mountain"/></svg></span><h3>Высокогорье</h3><p>Прохладное лето, чистый воздух и одна из самых живописных долин Кыргызстана.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-spa"/></svg></span><h3>Массаж и баня</h3><p>Лечебный и медовый массаж, ванны Залманова, баня, сауна и горячий чан.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-horse"/></svg></span><h3>Конные прогулки</h3><p>Прогулки верхом по долине с опытным конным гидом.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-yurt"/></svg></span><h3>Юрты</h3><p>Ночёвка в настоящей кыргызской юрте с шырдаками и тундуком над головой.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-users"/></svg></span><h3>Для семей</h3><p>Детям до 6 лет проживание бесплатно. Просторные юрты для больших семей.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-fire"/></svg></span><h3>Банкеты</h3><p>Большая юрта для праздников и конференций, мангал, казан и услуги повара.</p></div>
+      <div class="feature feature--light reveal"><span class="feature__icon"><svg class="icon"><use href="#i-car"/></svg></span><h3>Трансфер</h3><p>Встретим в Бишкеке или на границе Ак-Жол и Чалдовар на комфортном минивэне.</p></div>
+    </div>
+  </div>
+</section>
+
+{% if gallery %}
+<section class="section">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Территория' title='Как у нас' center=True %}
+    <div class="mosaic mosaic--4" data-lightbox-group>
+      {% for photo in gallery %}
+        <a class="mosaic__item reveal" href="{{ photo.image_url }}" data-lightbox data-caption="{{ photo.title }}"><img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy"></a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if faqs %}
+<section class="section section--cream">
+  <div class="container container--narrow">
+    {% include 'include/section_head.html' with eyebrow='Вопросы и ответы' title='Частые вопросы' center=True %}
+    <div class="faq">
+      {% for faq in faqs %}
+        <details class="faq__item reveal"{% if forloop.first %} open{% endif %}>
+          <summary>{{ faq.question }}<svg class="icon"><use href="#i-plus"/></svg></summary>
+          <p>{{ faq.answer }}</p>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include 'include/cta.html' %}
+{% endblock %}

@@ -1,0 +1,54 @@
+{% load static %}
+<footer class="footer">
+  <div class="ornament-band" aria-hidden="true"></div>
+  <div class="container footer__grid">
+    <div class="footer__about">
+      <a class="brand brand--light" href="{% url 'home' %}">
+        <img class="brand__logo" src="{% static 'img/logo-light.png' %}" alt="" width="52" height="51">
+        <span class="brand__text">
+          <span class="brand__name">Байтур</span>
+          <span class="brand__sub">кымызолечебница</span>
+        </span>
+      </a>
+      <p>Натуральный кымыз, горный воздух Суусамыра и тепло кыргызской юрты. Восстанавливаем силы так, как это делали наши предки.</p>
+      <div class="footer__social">
+        <a href="{{ site.whatsapp_href }}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="icon"><use href="#i-whatsapp"/></svg></a>
+        {% if site.instagram %}<a href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-instagram"/></svg></a>{% endif %}
+      </div>
+    </div>
+
+    <div>
+      <h3 class="footer__title">Отдых</h3>
+      <ul class="footer__links">
+        <li><a href="{% url 'kymyz' %}">Кымызолечение</a></li>
+        <li><a href="{% url 'rooms' %}">Номера и юрты</a></li>
+        <li><a href="{% url 'services' %}">Услуги</a></li>
+        <li><a href="{% url 'prices' %}">Цены</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="footer__title">О нас</h3>
+      <ul class="footer__links">
+        <li><a href="{% url 'about' %}">О комплексе</a></li>
+        <li><a href="{% url 'gallery' %}">Галерея</a></li>
+        <li><a href="{% url 'reviews' %}">Отзывы</a></li>
+        <li><a href="{% url 'contacts' %}">Контакты</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="footer__title">Контакты</h3>
+      <ul class="footer__contacts">
+        <li><svg class="icon"><use href="#i-phone"/></svg><a href="{{ site.phone_href }}">{{ site.phone }}</a></li>
+        {% if site.phone_2 %}<li><svg class="icon"><use href="#i-phone"/></svg><a href="{{ site.phone_2_href }}">{{ site.phone_2 }}</a></li>{% endif %}
+        <li><svg class="icon"><use href="#i-pin"/></svg><span>{{ site.address }}</span></li>
+        <li><svg class="icon"><use href="#i-sun"/></svg><span>{{ site.season }}</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© {% now 'Y' %} {{ site.name }}</span>
+    <span>Кымыз дарылоо · Kymyz Therapy</span>
+  </div>
+</footer>

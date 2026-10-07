@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+{% block title %}Цены на сезон — {{ site.name }}{% endblock %}
+
+{% block content %}
+{% static 'img/kymyz-grandma.jpg' as hero_img %}
+{% include 'include/page_hero.html' with title='Прайс-лист' subtitle='Актуальные цены на проживание и услуги кымызолечебницы.' image=hero_img %}
+
+<section class="section">
+  <div class="container">
+    <div class="tabs reveal" data-tabs>
+      <div class="tabs__list" role="tablist">
+        <button class="tabs__tab is-active" type="button" role="tab" data-tab="full">С питанием и кымызом</button>
+        <button class="tabs__tab" type="button" role="tab" data-tab="room">Без питания и молока</button>
+      </div>
+
+      <div class="tabs__panel is-active" role="tabpanel" data-panel="full">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Категория</th><th>Гостей</th><th>Цена за сутки</th><th>В стоимость включено</th></tr></thead>
+            <tbody>
+              {% for room in rooms %}{% for rate in room.rates.all %}
+                <tr>
+                  <td><a href="{{ room.get_absolute_url }}"><strong>{{ room.name }}</strong></a><small>{{ room.beds }}</small></td>
+                  <td>{{ rate.guests }}</td>
+                  <td class="nowrap"><strong>{{ rate.price_full|intcomma }} сом</strong>{% if rate.note %}<small>{{ rate.note }}</small>{% endif %}</td>
+                  <td><small>Проживание · трёхразовое питание · пятиразовое кобылье молоко</small></td>
+                </tr>
+              {% endfor %}{% endfor %}
+              <tr><td><strong>Дети до 6 лет (включительно)</strong></td><td>—</td><td><strong>Бесплатно</strong></td><td><small>Без предоставления питания и кобыльего молока</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel" data-panel="room" hidden>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Категория</th><th>Гостей</th><th>Цена за сутки</th></tr></thead>
+            <tbody>
+              {% for room in rooms %}{% for rate in room.rates.all %}{% if rate.price_room_only %}
+                <tr>
+                  <td><a href="{{ room.get_absolute_url }}"><strong>{{ room.name }}</strong></a><small>{{ room.beds }}</small></td>
+                  <td>{{ rate.guests }}</td>
+                  <td class="nowrap"><strong>{{ rate.price_room_only|intcomma }} сом</strong></td>
+                </tr>
+              {% endif %}{% endfor %}{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="note"><svg class="icon"><use href="#i-check"/></svg>Цены без питания указаны по курсу НБ КР. Питание для гостей без пакета — в разделе «Питание отдельно» ниже.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--cream">
+  <div class="container">
+    {% include 'include/section_head.html' with eyebrow='Дополнительно' title='Услуги и процедуры' center=True %}
+    <div class="price-grid">
+      {% for category in categories %}
+        <div class="price-card reveal" id="{{ category.slug }}">
+          <h3><svg class="icon"><use href="#i-{{ category.icon }}"/></svg>{{ category.name }}</h3>
+          <ul class="price-list">
+            {% for item in category.items.all %}
+              <li>
+                <span class="price-list__name">{{ item.name }}{% if item.duration or item.note %}<small>{{ item.duration }}{% if item.duration and item.note %} · {% endif %}{{ item.note }}</small>{% endif %}</span>
+                <span class="price-list__dots"></span>
+                <span class="price-list__price">{{ item.price }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include 'include/cta.html' %}
+{% endblock %}
