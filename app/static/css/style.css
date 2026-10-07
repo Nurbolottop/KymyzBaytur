@@ -21,6 +21,7 @@
   --sky: #7fb2ff;
   --orange: #b35f00;
   --orange-2: #ffb547;
+  --orange-text: #9a5000; /* оранжевый мелкий текст на светлом фоне, контраст ≥ 5 */
   --milk: #f7f3ec;
   --milk-2: #efe8db;
   --ink: #0b1430;
@@ -602,7 +603,7 @@ em { font-style: normal; }
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  color: var(--orange);
+  color: var(--orange-text);
   font-size: .75rem;
   font-weight: 800;
   letter-spacing: .22em;
