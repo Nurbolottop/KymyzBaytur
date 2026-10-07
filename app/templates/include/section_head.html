@@ -1,5 +1,5 @@
-<div class="section-head{% if center %} section-head--center{% endif %}{% if light %} section-head--light{% endif %} reveal">
-  {% if eyebrow %}<span class="eyebrow">{{ eyebrow }}</span>{% endif %}
-  <h2 class="section-title">{{ title }}</h2>
-  {% if text %}<p class="section-text">{{ text }}</p>{% endif %}
+<div class="section-head{% if center %} section-head--center{% endif %}{% if light %} section-head--light{% endif %}">
+  {% if eyebrow %}<span class="eyebrow reveal">{{ eyebrow }}</span>{% endif %}
+  <h2 class="section-title" data-split>{{ title|safe }}</h2>
+  {% if text %}<p class="section-text reveal">{{ text }}</p>{% endif %}
 </div>

@@ -6,11 +6,11 @@
 {% static 'img/hero-mountains.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='Отзывы гостей' subtitle='Многие гости приезжают к нам каждый год — и привозят друзей.' image=hero_img %}
 
-<section class="section">
+<section class="section section--light">
   <div class="container reviews-layout">
     <div class="reviews-list">
       {% for review in reviews %}
-        <figure class="review reveal">
+        <figure class="review glass glass--light reveal spot">
           <svg class="review__quote"><use href="#i-quote"/></svg>
           <div class="stars" role="img" aria-label="Оценка {{ review.rating }} из 5">{% for i in '12345' %}<svg class="icon{% if forloop.counter > review.rating %} is-off{% endif %}"><use href="#i-star"/></svg>{% endfor %}</div>
           <blockquote>{{ review.text|linebreaksbr }}</blockquote>
@@ -22,7 +22,7 @@
     </div>
 
     <aside>
-      <form class="form-card" method="post" novalidate>
+      <form class="form-card glass glass--light" method="post" novalidate>
         {% csrf_token %}
         <h2 class="h3">Оставить отзыв</h2>
         <p class="form-card__hint">Расскажите о своём отдыхе — отзыв появится после проверки.</p>

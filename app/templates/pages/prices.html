@@ -6,7 +6,7 @@
 {% static 'img/kymyz-grandma.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='Прайс-лист' subtitle='Актуальные цены на проживание и услуги кымызолечебницы.' image=hero_img %}
 
-<section class="section">
+<section class="section section--light">
   <div class="container">
     <div class="tabs reveal" data-tabs>
       <div class="tabs__list" role="tablist">
@@ -15,7 +15,7 @@
       </div>
 
       <div class="tabs__panel is-active" role="tabpanel" data-panel="full">
-        <div class="table-wrap">
+        <div class="table-wrap glass glass--light">
           <table class="table">
             <thead><tr><th>Категория</th><th>Гостей</th><th>Цена за сутки</th><th>В стоимость включено</th></tr></thead>
             <tbody>
@@ -34,7 +34,7 @@
       </div>
 
       <div class="tabs__panel" role="tabpanel" data-panel="room" hidden>
-        <div class="table-wrap">
+        <div class="table-wrap glass glass--light">
           <table class="table">
             <thead><tr><th>Категория</th><th>Гостей</th><th>Цена за сутки</th></tr></thead>
             <tbody>
@@ -54,12 +54,13 @@
   </div>
 </section>
 
-<section class="section section--alt">
+<section class="section section--light">
+  <div class="aurora" aria-hidden="true"><span></span><span></span></div>
   <div class="container">
     {% include 'include/section_head.html' with eyebrow='Дополнительно' title='Услуги и процедуры' center=True %}
     <div class="price-grid">
       {% for category in categories %}
-        <div class="price-card reveal" id="{{ category.slug }}">
+        <div class="price-card glass glass--light reveal" id="{{ category.slug }}">
           <h3><svg class="icon"><use href="#i-{{ category.icon }}"/></svg>{{ category.name }}</h3>
           <ul class="price-list">
             {% for item in category.items.all %}

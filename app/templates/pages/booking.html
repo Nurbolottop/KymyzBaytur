@@ -6,9 +6,9 @@
 {% static 'img/yurt-beds.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='Бронирование' subtitle='Оставьте заявку — менеджер свяжется с вами и подтвердит бронь.' image=hero_img %}
 
-<section class="section">
+<section class="section section--light">
   <div class="container booking">
-    <form class="form-card booking__form" method="post" novalidate data-booking-form>
+    <form class="form-card glass glass--light booking__form" method="post" novalidate data-booking-form>
       {% csrf_token %}
       <h2 class="h3">Заявка на проживание</h2>
       {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
@@ -31,7 +31,7 @@
     </form>
 
     <aside class="booking__aside">
-      <div class="booking-card" data-estimate>
+      <div class="booking-card glass glass--light" data-estimate>
         <h2 class="h3">Предварительный расчёт</h2>
         <dl class="estimate">
           <div><dt>Номер</dt><dd data-est-room>—</dd></div>
@@ -41,7 +41,7 @@
         <div class="estimate__total"><span>Итого</span><strong data-est-total>—</strong></div>
         <p class="booking-card__hint" data-est-hint>Выберите номер и даты, чтобы увидеть ориентировочную стоимость. Точную сумму подтвердит менеджер.</p>
       </div>
-      <div class="booking-card booking-card--soft">
+      <div class="booking-card booking-card--soft glass glass--light">
         <h3>Удобнее написать?</h3>
         <p>Ответим на вопросы и забронируем в WhatsApp.</p>
         <a class="btn btn--outline btn--block" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-whatsapp"/></svg>{{ site.phone }}</a>
