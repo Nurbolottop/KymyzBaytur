@@ -198,7 +198,7 @@
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
-  onScroll();
+  onScrollHeader(); // параллакс включается с первой прокруткой — без сдвигов при загрузке
 
   /* ---------- Подсветка под курсором, 3D-наклон, магнитные кнопки ---------- */
   if (finePointer && !reduceMotion) {
