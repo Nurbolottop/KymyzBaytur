@@ -6,11 +6,11 @@
 {% static 'img/yurt-camp.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='Галерея' subtitle='Горы, юрты, табуны и свежий кымыз — посмотрите, как отдыхают в «Байтур».' image=hero_img %}
 
-<section class="section section--light">
+<section class="section">
   <div class="container">
     <div class="chips chips--center reveal" data-filter>
-      <button class="chip glass glass--light is-active" type="button" data-filter-value="all">Все</button>
-      {% for value, label in categories %}<button class="chip glass glass--light" type="button" data-filter-value="{{ value }}">{{ label }}</button>{% endfor %}
+      <button class="chip is-active" type="button" data-filter-value="all">Все</button>
+      {% for value, label in categories %}<button class="chip" type="button" data-filter-value="{{ value }}">{{ label }}</button>{% endfor %}
     </div>
     <div class="gallery-grid" data-lightbox-group>
       {% for photo in images %}
