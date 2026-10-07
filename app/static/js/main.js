@@ -6,7 +6,21 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+  /* ---------- Мягкая инерционная прокрутка (только мышь/тачпад, после загрузки) ---------- */
+  let lenis = null;
+  const smoothScroll = () => {
+    if (reduceMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const s = document.createElement('script');
+    s.src = '/static/vendor/lenis.min.js';
+    s.onload = () => {
+      lenis = new window.Lenis({ autoRaf: true, lerp: 0.085, anchors: { offset: -100 } });
+    };
+    document.head.appendChild(s);
+  };
+  if (document.readyState === 'complete') smoothScroll(); else window.addEventListener('load', smoothScroll);
+
   const lockScroll = (lock) => {
+    if (lenis) lock ? lenis.stop() : lenis.start();
     document.documentElement.style.overflow = lock ? 'hidden' : '';
   };
 
