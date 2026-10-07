@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static assets %}
 {% block title %}Кымызолечение — {{ site.name }}{% endblock %}
 {% block description %}Кымызолечение в Суусамыре: что такое кымыз и саамал, польза кобыльего молока, как проходит курс в кымызолечебнице «Байтур».{% endblock %}
 
@@ -16,7 +16,7 @@
       <p>Для кыргызов молоко — это святое. Оно используется в обрядах, считается символом чистоты и изобилия и служит основой целебных продуктов — кымыза, курута, чалапа.</p>
     </div>
     <div class="split__media">
-      <img class="split__img reveal-img" src="{% static 'img/kymyz-pour.webp' %}" alt="Кымыз наливают из көөкөра" loading="lazy">
+      <img class="split__img reveal-img" src="{% static 'img/kymyz-pour.webp' %}" srcset="{% static_srcset 'img/kymyz-pour.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз наливают из көөкөра" loading="lazy">
     </div>
   </div>
 </section>
@@ -65,7 +65,7 @@
       <a class="btn btn--primary" href="{% url 'booking' %}">Забронировать курс</a>
     </div>
     <div class="split__media">
-      <img class="split__img reveal-img" src="{% static 'img/kymyz-grandma.webp' %}" alt="Кымыз в резной чаре" loading="lazy">
+      <img class="split__img reveal-img" src="{% static 'img/kymyz-grandma.webp' %}" srcset="{% static_srcset 'img/kymyz-grandma.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз в резной чаре" loading="lazy">
     </div>
   </div>
 </section>

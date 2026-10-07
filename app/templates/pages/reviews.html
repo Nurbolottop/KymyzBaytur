@@ -12,7 +12,7 @@
       {% for review in reviews %}
         <figure class="review glass glass--light reveal spot">
           <svg class="review__quote"><use href="#i-quote"/></svg>
-          <div class="stars" aria-label="Оценка {{ review.rating }} из 5">{% for i in '12345' %}<svg class="icon{% if forloop.counter > review.rating %} is-off{% endif %}"><use href="#i-star"/></svg>{% endfor %}</div>
+          <div class="stars" role="img" aria-label="Оценка {{ review.rating }} из 5">{% for i in '12345' %}<svg class="icon{% if forloop.counter > review.rating %} is-off{% endif %}"><use href="#i-star"/></svg>{% endfor %}</div>
           <blockquote>{{ review.text|linebreaksbr }}</blockquote>
           <figcaption><strong>{{ review.name }}</strong>{% if review.city %} · {{ review.city }}{% endif %}<span>{{ review.created_at|date:'F Y' }} · {{ review.source }}</span></figcaption>
         </figure>
