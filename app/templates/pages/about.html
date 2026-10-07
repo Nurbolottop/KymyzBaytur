@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static assets %}
 {% block title %}О нас — {{ site.name }}{% endblock %}
 
 {% block content %}
@@ -15,8 +15,8 @@
       <p>Многие гости возвращаются к нам каждый год — и привозят с собой друзей. Для нас это лучшая оценка.</p>
     </div>
     <div class="split__media">
-      <img class="split__img reveal-img" src="{% static 'img/guest-girl.webp' %}" alt="Лето в Суусамыре" loading="lazy">
-      <img class="split__img split__img--small reveal-img mirror-img" src="{% static 'img/yurt-ceiling.webp' %}" alt="Тундук большой юрты" loading="lazy">
+      <img class="split__img reveal-img" src="{% static 'img/guest-girl.webp' %}" srcset="{% static_srcset 'img/guest-girl.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Лето в Суусамыре" loading="lazy">
+      <img class="split__img split__img--small reveal-img mirror-img" src="{% static 'img/yurt-ceiling.webp' %}" srcset="{% static_srcset 'img/yurt-ceiling.webp' %}" sizes="320px" alt="Тундук большой юрты" loading="lazy">
     </div>
   </div>
 </section>
@@ -44,7 +44,7 @@
     {% include 'include/section_head.html' with eyebrow='Территория' title='Как у нас' center=True %}
     <div class="mosaic mosaic--4" data-lightbox-group>
       {% for photo in gallery %}
-        <a class="mosaic__item reveal-img" href="{{ photo.image_url }}" data-lightbox data-caption="{{ photo.title }}"><img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy"></a>
+        <a class="mosaic__item reveal-img" href="{{ photo.image_url }}" data-lightbox data-caption="{{ photo.title }}"><img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="{{ photo.title }}" loading="lazy"></a>
       {% endfor %}
     </div>
   </div>

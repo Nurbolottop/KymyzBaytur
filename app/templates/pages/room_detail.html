@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize %}
+{% load humanize assets %}
 {% block title %}{{ room.name }} — {{ site.name }}{% endblock %}
 {% block description %}{{ room.short_description }}{% endblock %}
 
@@ -12,12 +12,12 @@
     <div class="room-detail__main">
       <div class="room-gallery" data-lightbox-group>
         <a class="room-gallery__main reveal-img mirror-img" href="{{ room.image_url }}" data-lightbox data-caption="{{ room.name }}">
-          <img src="{{ room.image_url }}" alt="{{ room.name }}">
+          <img src="{{ room.image_url }}" srcset="{{ room.image_url|srcset }}" sizes="(max-width: 1080px) 92vw, 760px" alt="Фото: {{ room.name }}" fetchpriority="high">
         </a>
         {% if room.photos.all|length > 1 %}
           <div class="room-gallery__thumbs">
             {% for photo in room.photos.all %}{% if not forloop.first %}
-              <a href="{{ photo.image_url }}" data-lightbox data-caption="{{ room.name }}"><img src="{{ photo.image_url }}" alt="" loading="lazy"></a>
+              <a href="{{ photo.image_url }}" data-lightbox data-caption="{{ room.name }}"><img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="200px" alt="" loading="lazy"></a>
             {% endif %}{% endfor %}
           </div>
         {% endif %}

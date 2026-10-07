@@ -14,7 +14,7 @@
   const splash = $('[data-splash]');
   const root = document.documentElement;
   if (splash && root.classList.contains('splash-active')) {
-    try { sessionStorage.setItem('kymyz-splash', '1'); } catch (e) { /* приватный режим */ }
+    try { localStorage.setItem('kymyz-splash', String(Date.now())); } catch (e) { /* приватный режим */ }
     lockScroll(true);
     let done = false;
     const leave = () => {
@@ -26,7 +26,7 @@
       setTimeout(() => splash.remove(), 600);
     };
     // Не ждём загрузки всех картинок — сцена короткая, сайт под ней уже готов
-    setTimeout(leave, 1800);
+    setTimeout(leave, 1300);
     splash.addEventListener('click', leave);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' || e.key === 'Enter') leave(); }, { once: true });
   } else if (splash) {
@@ -81,7 +81,10 @@
     });
     slider.style.setProperty('--slide-ms', `${delay}ms`);
 
+    let started = false;
     const go = (i) => {
+      if (started) [...texts, ...bgs].forEach((el) => el.classList.remove('is-first'));
+      started = true;
       index = (i + texts.length) % texts.length;
       texts.forEach((el, n) => el.classList.toggle('is-active', n === index));
       bgs.forEach((el, n) => el.classList.toggle('is-active', n === index));

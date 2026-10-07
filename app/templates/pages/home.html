@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% load static humanize %}
+{% load static humanize assets %}
 {% block body_class %}page-home{% endblock %}
 
 {% block content %}
 <section class="hero" data-slider>
   <div class="hero__media" data-parallax="0.3">
     {% for slide in slides %}
-      <img class="hero__bg{% if forloop.first %} is-active{% endif %}" src="{{ slide.image_url }}" alt="" data-slide-bg {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+      <img class="hero__bg{% if forloop.first %} is-active is-first{% endif %}" src="{{ slide.image_url }}" srcset="{{ slide.image_url|srcset }}" sizes="100vw" alt="" data-slide-bg {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
     {% endfor %}
   </div>
   <div class="hero__shade" aria-hidden="true"></div>
@@ -15,7 +15,7 @@
   <div class="container hero__grid">
     <div class="hero__texts">
       {% for slide in slides %}
-        <div class="hero__content{% if forloop.first %} is-active{% endif %}" data-slide>
+        <div class="hero__content{% if forloop.first %} is-active is-first{% endif %}" data-slide>
           {% if slide.eyebrow %}<span class="hero__eyebrow glass"><span class="dot"></span>{{ slide.eyebrow }}</span>{% endif %}
           {% if forloop.first %}<h1 class="hero__title">{{ slide.title }}</h1>{% else %}<p class="hero__title">{{ slide.title }}</p>{% endif %}
           {% if slide.subtitle %}<p class="hero__subtitle">{{ slide.subtitle }}</p>{% endif %}
@@ -83,10 +83,10 @@
     <div class="split__media">
       <div class="photo-stack">
         <figure class="photo-stack__main reveal-img">
-          <img src="{% static 'img/kymyz-pour.webp' %}" alt="Свежий кымыз из кожаного көөкөра" loading="lazy">
+          <img src="{% static 'img/kymyz-pour.webp' %}" srcset="{% static_srcset 'img/kymyz-pour.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Свежий кымыз из кожаного көөкөра" loading="lazy">
         </figure>
         <figure class="photo-stack__small reveal-img mirror-img">
-          <img src="{% static 'img/yurt-camp.webp' %}" alt="Юрты комплекса «Байтур»" loading="lazy">
+          <img src="{% static 'img/yurt-camp.webp' %}" srcset="{% static_srcset 'img/yurt-camp.webp' %}" sizes="320px" alt="Юрты комплекса «Байтур»" loading="lazy">
         </figure>
         <div class="photo-stack__chip glass glass--dark float">
           <svg class="icon"><use href="#i-leaf"/></svg>
@@ -139,7 +139,7 @@
     <div class="split__media">
       <div class="photo-glass">
         <figure class="photo-glass__img reveal-img mirror-img">
-          <img src="{% static 'img/kymyz-grandma.webp' %}" alt="Кымыз в деревянной чаре" loading="lazy">
+          <img src="{% static 'img/kymyz-grandma.webp' %}" srcset="{% static_srcset 'img/kymyz-grandma.webp' %}" sizes="(max-width: 1080px) 92vw, 620px" alt="Кымыз в деревянной чаре" loading="lazy">
         </figure>
         <blockquote class="photo-glass__quote glass glass--dark float">
           «Для кыргызского народа молоко — это святое»
@@ -173,7 +173,7 @@
 </section>
 
 <section class="lake">
-  <div class="lake__bg" data-parallax="0.2"><img src="{% static 'img/hero-valley.webp' %}" alt="" loading="lazy"></div>
+  <div class="lake__bg" data-parallax="0.2"><img src="{% static 'img/hero-valley.webp' %}" srcset="{% static_srcset 'img/hero-valley.webp' %}" sizes="100vw" alt="" loading="lazy"></div>
   <div class="lake__inner container">
     <span class="eyebrow eyebrow--light reveal">Высокогорная долина</span>
     <p class="lake__word mirror mirror--lake" data-split>Суусамыр</p>
@@ -191,7 +191,7 @@
     <div class="grid grid--3">
       {% for service in services %}
         <a class="service-card reveal spot" href="{% url 'services' %}#{{ service.slug }}" data-tilt>
-          <img src="{{ service.image_url }}" alt="{{ service.name }}" loading="lazy">
+          <img src="{{ service.image_url }}" srcset="{{ service.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
           <div class="service-card__body glass glass--dark">
             <span class="service-card__icon"><svg class="icon"><use href="#i-{{ service.icon }}"/></svg></span>
             <h3>{{ service.name }}</h3>
@@ -211,7 +211,7 @@
     <div class="grid grid--2">
       {% for promo in promos %}
         <article class="promo glass glass--light reveal spot">
-          <div class="promo__media"><img src="{{ promo.image_url }}" alt="" loading="lazy"></div>
+          <div class="promo__media"><img src="{{ promo.image_url }}" srcset="{{ promo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy"></div>
           <div class="promo__body">
             {% if promo.badge %}<span class="promo__badge">{{ promo.badge }}</span>{% endif %}
             <h3>{{ promo.title }}</h3>
@@ -237,7 +237,7 @@
       {% for review in reviews|slice:':3' %}
         <figure class="review glass glass--light reveal spot" data-tilt>
           <svg class="review__quote"><use href="#i-quote"/></svg>
-          <div class="stars" aria-label="Оценка {{ review.rating }} из 5">{% for i in '12345' %}<svg class="icon{% if forloop.counter > review.rating %} is-off{% endif %}"><use href="#i-star"/></svg>{% endfor %}</div>
+          <div class="stars" role="img" aria-label="Оценка {{ review.rating }} из 5">{% for i in '12345' %}<svg class="icon{% if forloop.counter > review.rating %} is-off{% endif %}"><use href="#i-star"/></svg>{% endfor %}</div>
           <blockquote>{{ review.text }}</blockquote>
           <figcaption><span class="review__avatar">{{ review.name|slice:':1' }}</span><span><strong>{{ review.name }}</strong>{% if review.city %} · {{ review.city }}{% endif %}<small>{{ review.source }}</small></span></figcaption>
         </figure>
@@ -256,7 +256,7 @@
     <div class="mosaic" data-lightbox-group>
       {% for photo in gallery %}
         <a class="mosaic__item reveal-img" href="{{ photo.image_url }}" data-lightbox data-caption="{{ photo.title }}">
-          <img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy">
+          <img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
           {% if photo.title %}<span class="mosaic__caption glass">{{ photo.title }}</span>{% endif %}
         </a>
       {% endfor %}
