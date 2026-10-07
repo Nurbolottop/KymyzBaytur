@@ -15,8 +15,9 @@
   --dark: #14306b;
   --dark-2: #0f2556;
   --blue: #0d3a99;
-  --orange: #e08600;
-  --orange-dark: #c27200;
+  --orange: #b35f00;       /* кнопки: белый текст с контрастом 4.6 */
+  --orange-dark: #a65700;  /* оранжевый текст на светлом фоне */
+  --orange-hover: #9e5300;
   --ink: #1d2433;
   --text: #444b5c;
   --muted: #626a7c;
@@ -98,7 +99,7 @@ small { display: block; color: var(--muted); font-size: .84rem; line-height: 1.4
   transition: background .2s, color .2s, border-color .2s;
 }
 .btn--primary { background: var(--orange); color: var(--white); }
-.btn--primary:hover { background: var(--orange-dark); color: var(--white); }
+.btn--primary:hover { background: var(--orange-hover); color: var(--white); }
 .btn--outline { border-color: var(--ink); color: var(--ink); background: transparent; }
 .btn--outline:hover { background: var(--ink); color: var(--white); }
 .btn--light { border-color: rgba(255, 255, 255, .8); color: var(--white); background: transparent; }
@@ -193,9 +194,11 @@ a.topbar__item:hover { color: var(--white); }
 .hero__title { font-family: var(--font-head); font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 600; line-height: 1.1; color: var(--white); margin: 14px 0 18px; }
 .hero__subtitle { font-size: clamp(1rem, 1.6vw, 1.15rem); color: rgba(255, 255, 255, .9); max-width: 540px; margin: 0; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.hero__dots { display: flex; gap: 8px; margin-top: 40px; }
-.hero__dot { width: 10px; height: 10px; padding: 0; border: 1.5px solid rgba(255, 255, 255, .8); border-radius: 50%; background: transparent; transition: background .2s; }
-.hero__dot.is-active { background: var(--white); }
+.hero__dots { display: flex; gap: 4px; margin: 32px 0 0 -7px; }
+/* кнопка 24×24 для удобного нажатия, видимая точка — 10px */
+.hero__dot { position: relative; width: 24px; height: 24px; padding: 0; border: 0; background: transparent; }
+.hero__dot::before { content: ''; position: absolute; inset: 7px; border: 1.5px solid rgba(255, 255, 255, .85); border-radius: 50%; transition: background .2s; }
+.hero__dot.is-active::before { background: var(--white); }
 
 /* ---------- Бронь ---------- */
 .booking-bar {
@@ -218,7 +221,7 @@ a.topbar__item:hover { color: var(--white); }
 
 /* ---------- Секции и плавные переходы между ними ---------- */
 .section { position: relative; padding: 96px 0; }
-.section, .photo-band, .cta, .footer { content-visibility: auto; contain-intrinsic-size: auto 800px; }
+.section, .photo-band, .cta { content-visibility: auto; contain-intrinsic-size: auto 800px; }
 .section--alt {
   background: linear-gradient(180deg, var(--bg) 0, var(--alt) var(--fade), var(--alt) calc(100% - var(--fade)), var(--bg) 100%);
 }
