@@ -1,39 +1,46 @@
 {% load static %}
 {% with url=request.resolver_match.url_name %}
+<div class="topbar">
+  <div class="container topbar__inner">
+    <span class="topbar__item"><svg class="icon"><use href="#i-sun"/></svg>{{ site.season }}</span>
+    <span class="topbar__item topbar__item--wide"><svg class="icon"><use href="#i-pin"/></svg>Суусамырская долина · 3 часа от Бишкека</span>
+    <span class="topbar__spacer"></span>
+    <a class="topbar__item" href="{{ site.phone_href }}"><svg class="icon"><use href="#i-phone"/></svg>{{ site.phone }}</a>
+    <a class="topbar__social" href="{{ site.whatsapp_href }}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="icon"><use href="#i-whatsapp"/></svg></a>
+    {% if site.instagram %}<a class="topbar__social" href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-instagram"/></svg></a>{% endif %}
+  </div>
+</div>
+
 <header class="header" data-header>
-  <div class="container">
-    <div class="header__bar">
-      <a class="brand" href="{% url 'home' %}">
-        <img class="brand__logo" src="{% static 'img/logo.png' %}" alt="" width="46" height="45">
-        <span class="brand__text">
-          <span class="brand__name">Байтур</span>
-          <span class="brand__sub">кымызолечебница</span>
-        </span>
-      </a>
+  <div class="container header__inner">
+    <a class="brand" href="{% url 'home' %}">
+      <img class="brand__logo" src="{% static 'img/logo-sm.webp' %}" alt="" width="46" height="45">
+      <span class="brand__text">
+        <span class="brand__name">Байтур</span>
+        <span class="brand__sub">кымызолечебница</span>
+      </span>
+    </a>
 
-      <nav class="nav" data-nav aria-label="Основное меню">
-        <a class="nav__link{% if url == 'about' %} is-active{% endif %}" href="{% url 'about' %}"><span>О нас</span></a>
-        <a class="nav__link{% if url == 'kymyz' %} is-active{% endif %}" href="{% url 'kymyz' %}"><span>Кымызолечение</span></a>
-        <a class="nav__link{% if url == 'rooms' or url == 'room_detail' %} is-active{% endif %}" href="{% url 'rooms' %}"><span>Номера</span></a>
-        <a class="nav__link{% if url == 'services' %} is-active{% endif %}" href="{% url 'services' %}"><span>Услуги</span></a>
-        <a class="nav__link{% if url == 'prices' %} is-active{% endif %}" href="{% url 'prices' %}"><span>Цены</span></a>
-        <a class="nav__link{% if url == 'gallery' %} is-active{% endif %}" href="{% url 'gallery' %}"><span>Галерея</span></a>
-        <a class="nav__link{% if url == 'reviews' %} is-active{% endif %}" href="{% url 'reviews' %}"><span>Отзывы</span></a>
-        <a class="nav__link{% if url == 'contacts' %} is-active{% endif %}" href="{% url 'contacts' %}"><span>Контакты</span></a>
-        <div class="nav__mobile-extra">
-          <a class="btn btn--primary btn--block btn--lg" href="{% url 'booking' %}"><span>Забронировать</span></a>
-          <a class="nav__phone" href="{{ site.phone_href }}"><svg class="icon"><use href="#i-phone"/></svg>{{ site.phone }}</a>
-          <span class="nav__season">{{ site.season }}</span>
-        </div>
-      </nav>
-
-      <div class="header__actions">
-        <a class="icon-btn header__phone" href="{{ site.phone_href }}" aria-label="Позвонить {{ site.phone }}"><svg class="icon"><use href="#i-phone"/></svg></a>
-        <a class="btn btn--primary btn--sm header__cta" href="{% url 'booking' %}" data-magnetic><span>Забронировать</span></a>
-        <button class="burger" type="button" data-burger aria-label="Меню" aria-expanded="false">
-          <span></span><span></span>
-        </button>
+    <nav class="nav" data-nav aria-label="Основное меню">
+      <a class="nav__link{% if url == 'about' %} is-active{% endif %}" href="{% url 'about' %}">О нас</a>
+      <a class="nav__link{% if url == 'kymyz' %} is-active{% endif %}" href="{% url 'kymyz' %}">Кымызолечение</a>
+      <a class="nav__link{% if url == 'rooms' or url == 'room_detail' %} is-active{% endif %}" href="{% url 'rooms' %}">Номера</a>
+      <a class="nav__link{% if url == 'services' %} is-active{% endif %}" href="{% url 'services' %}">Услуги</a>
+      <a class="nav__link{% if url == 'prices' %} is-active{% endif %}" href="{% url 'prices' %}">Цены</a>
+      <a class="nav__link{% if url == 'gallery' %} is-active{% endif %}" href="{% url 'gallery' %}">Галерея</a>
+      <a class="nav__link{% if url == 'reviews' %} is-active{% endif %}" href="{% url 'reviews' %}">Отзывы</a>
+      <a class="nav__link{% if url == 'contacts' %} is-active{% endif %}" href="{% url 'contacts' %}">Контакты</a>
+      <div class="nav__mobile-extra">
+        <a class="btn btn--primary btn--block" href="{% url 'booking' %}">Забронировать</a>
+        <a class="nav__phone" href="{{ site.phone_href }}"><svg class="icon"><use href="#i-phone"/></svg>{{ site.phone }}</a>
       </div>
+    </nav>
+
+    <div class="header__actions">
+      <a class="btn btn--primary header__cta" href="{% url 'booking' %}">Забронировать</a>
+      <button class="burger" type="button" data-burger aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>

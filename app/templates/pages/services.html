@@ -6,15 +6,15 @@
 {% static 'img/chan.webp' as hero_img %}
 {% include 'include/page_hero.html' with title='Услуги' subtitle='Массаж, баня, конные прогулки, банкеты в юрте и трансфер до Суусамыра.' image=hero_img %}
 
-<section class="section section--light">
+<section class="section">
   <div class="container">
     <nav class="chips reveal" aria-label="Категории услуг">
-      {% for category in categories %}<a class="chip glass glass--light" href="#{{ category.slug }}"><svg class="icon"><use href="#i-{{ category.icon }}"/></svg>{{ category.name }}</a>{% endfor %}
+      {% for category in categories %}<a class="chip" href="#{{ category.slug }}"><svg class="icon"><use href="#i-{{ category.icon }}"/></svg>{{ category.name }}</a>{% endfor %}
     </nav>
 
     {% for category in categories %}
       <article class="service-block{% cycle '' ' service-block--reverse' %}" id="{{ category.slug }}">
-        <div class="service-block__media reveal-img">
+        <div class="service-block__media reveal">
           <img src="{{ category.image_url }}" srcset="{{ category.image_url|srcset }}" sizes="(max-width: 1080px) 92vw, 560px" alt="" loading="lazy">
         </div>
         <div class="service-block__body reveal">
@@ -37,13 +37,12 @@
 </section>
 
 {% if promos %}
-<section class="section section--light">
-  <div class="aurora" aria-hidden="true"><span></span><span></span></div>
+<section class="section section--alt">
   <div class="container">
     {% include 'include/section_head.html' with eyebrow='Спецпредложения' title='Акции' %}
     <div class="grid grid--2">
       {% for promo in promos %}
-        <article class="promo glass glass--light reveal spot">
+        <article class="promo reveal">
           <img src="{{ promo.image_url }}" srcset="{{ promo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
           <div class="promo__body">
             {% if promo.badge %}<span class="promo__badge">{{ promo.badge }}</span>{% endif %}
