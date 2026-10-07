@@ -6,7 +6,7 @@
 <section class="hero" data-slider>
   <div class="hero__media" data-parallax="0.3">
     {% for slide in slides %}
-      <img class="hero__bg{% if forloop.first %} is-active{% endif %}" src="{{ slide.image_url }}" alt="" data-slide-bg {% if not forloop.first %}loading="lazy"{% endif %}>
+      <img class="hero__bg{% if forloop.first %} is-active{% endif %}" src="{{ slide.image_url }}" alt="" data-slide-bg {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
     {% endfor %}
   </div>
   <div class="hero__shade" aria-hidden="true"></div>
@@ -82,11 +82,11 @@
   <div class="container split">
     <div class="split__media">
       <div class="photo-stack">
-        <figure class="photo-stack__main reveal-img" data-parallax="-0.06">
-          <img src="{% static 'img/kymyz-pour.jpg' %}" alt="Свежий кымыз из кожаного көөкөра" loading="lazy">
+        <figure class="photo-stack__main reveal-img">
+          <img src="{% static 'img/kymyz-pour.webp' %}" alt="Свежий кымыз из кожаного көөкөра" loading="lazy">
         </figure>
         <figure class="photo-stack__small reveal-img mirror-img">
-          <img src="{% static 'img/yurt-camp.jpg' %}" alt="Юрты комплекса «Байтур»" loading="lazy">
+          <img src="{% static 'img/yurt-camp.webp' %}" alt="Юрты комплекса «Байтур»" loading="lazy">
         </figure>
         <div class="photo-stack__chip glass glass--dark float">
           <svg class="icon"><use href="#i-leaf"/></svg>
@@ -139,7 +139,7 @@
     <div class="split__media">
       <div class="photo-glass">
         <figure class="photo-glass__img reveal-img mirror-img">
-          <img src="{% static 'img/kymyz-grandma.jpg' %}" alt="Кымыз в деревянной чаре" loading="lazy">
+          <img src="{% static 'img/kymyz-grandma.webp' %}" alt="Кымыз в деревянной чаре" loading="lazy">
         </figure>
         <blockquote class="photo-glass__quote glass glass--dark float">
           «Для кыргызского народа молоко — это святое»
@@ -173,7 +173,7 @@
 </section>
 
 <section class="lake">
-  <div class="lake__bg" data-parallax="0.2"><img src="{% static 'img/hero-valley.jpg' %}" alt="" loading="lazy"></div>
+  <div class="lake__bg" data-parallax="0.2"><img src="{% static 'img/hero-valley.webp' %}" alt="" loading="lazy"></div>
   <div class="lake__inner container">
     <span class="eyebrow eyebrow--light reveal">Высокогорная долина</span>
     <p class="lake__word mirror mirror--lake" data-split>Суусамыр</p>

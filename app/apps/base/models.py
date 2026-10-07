@@ -1,5 +1,17 @@
+from functools import lru_cache
+
+from django.contrib.staticfiles import finders
 from django.db import models
 from django.templatetags.static import static
+
+
+@lru_cache(maxsize=None)
+def _prefer_webp(path):
+    """Для статичных .jpg/.png отдаём лёгкую .webp-копию, если она лежит рядом."""
+    stem, dot, ext = path.rpartition('.')
+    if dot and ext.lower() in ('jpg', 'jpeg', 'png') and finders.find(f'{stem}.webp'):
+        return f'{stem}.webp'
+    return path
 
 
 class StaticImageMixin(models.Model):
@@ -22,8 +34,8 @@ class StaticImageMixin(models.Model):
         if self.image:
             return self.image.url
         if self.static_image:
-            return static(self.static_image)
-        return static('img/hero-mountains.jpg')
+            return static(_prefer_webp(self.static_image))
+        return static('img/hero-mountains.webp')
 
 
 class SiteSettings(models.Model):

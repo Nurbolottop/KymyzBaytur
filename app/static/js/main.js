@@ -6,15 +6,8 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  /* ---------- Плавный инерционный скролл (Lenis) ---------- */
-  let lenis = null;
-  if (window.Lenis && !reduceMotion) {
-    lenis = new window.Lenis({ autoRaf: true, anchors: { offset: -100 }, lerp: 0.09 });
-    window.__lenis = lenis; // для отладки из консоли
-  }
   const lockScroll = (lock) => {
-    if (lenis) lock ? lenis.stop() : lenis.start();
-    document.body.style.overflow = lock ? 'hidden' : '';
+    document.documentElement.style.overflow = lock ? 'hidden' : '';
   };
 
   /* ---------- Заставка: показываем один раз за сессию ---------- */
@@ -23,8 +16,6 @@
   if (splash && root.classList.contains('splash-active')) {
     try { sessionStorage.setItem('kymyz-splash', '1'); } catch (e) { /* приватный режим */ }
     lockScroll(true);
-    const started = performance.now();
-    const minShow = 3600; // столько длится сцена
     let done = false;
     const leave = () => {
       if (done) return;
@@ -32,12 +23,10 @@
       splash.classList.add('is-leaving');
       root.classList.remove('splash-active');
       lockScroll(false);
-      setTimeout(() => splash.remove(), 1200);
+      setTimeout(() => splash.remove(), 600);
     };
-    const leaveWhenReady = () => setTimeout(leave, Math.max(0, minShow - (performance.now() - started)));
-    if (document.readyState === 'complete') leaveWhenReady();
-    else window.addEventListener('load', leaveWhenReady);
-    setTimeout(leave, 6000); // страховка, если какая-то картинка грузится вечно
+    // Не ждём загрузки всех картинок — сцена короткая, сайт под ней уже готов
+    setTimeout(leave, 1800);
     splash.addEventListener('click', leave);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' || e.key === 'Enter') leave(); }, { once: true });
   } else if (splash) {
@@ -203,7 +192,7 @@
 
   const onScroll = () => {
     onScrollHeader();
-    if (!ticking && parallaxEls.length && !reduceMotion) {
+    if (!ticking && parallaxEls.length && finePointer && !reduceMotion) {
       ticking = true;
       requestAnimationFrame(updateParallax);
     }
@@ -326,10 +315,9 @@
       items.forEach((item) => {
         item.hidden = value !== 'all' && item.dataset.category !== value;
         if (!item.hidden && item.animate && !reduceMotion) {
-          item.animate([{ opacity: 0, transform: 'scale(.94)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'none' }], { duration: 700, easing: 'cubic-bezier(.22,1,.36,1)' });
+          item.animate([{ opacity: 0, transform: 'scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.22,1,.36,1)' });
         }
       });
-      if (lenis) lenis.resize();
     });
   }
 
