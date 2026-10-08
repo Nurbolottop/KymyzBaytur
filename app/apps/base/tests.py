@@ -26,3 +26,11 @@ class PagesTest(TestCase):
 
     def test_unknown_room_404(self):
         self.assertEqual(self.client.get('/rooms/nope/').status_code, 404)
+
+
+class SeoFilesTest(TestCase):
+    def test_robots_and_sitemap(self):
+        robots = self.client.get('/robots.txt')
+        self.assertEqual(robots['Content-Type'], 'text/plain')
+        self.assertContains(robots, 'Sitemap:')
+        self.assertContains(self.client.get('/sitemap.xml'), '/rooms/lux/')
