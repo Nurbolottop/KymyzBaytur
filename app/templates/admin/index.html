@@ -1,0 +1,70 @@
+{% extends 'admin/base.html' %}
+{% load i18n %}
+
+{% block title %}Обзор | Байтур — админка{% endblock %}
+
+{% block branding %}
+  {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="kb-dash">
+  <div class="kb-dash__head">
+    <div>
+      <h1 class="kb-dash__title">Добрый день{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}</h1>
+      <p class="kb-dash__sub">Кымызолечебница «Байтур» · {% now "j E Y" %}</p>
+    </div>
+    <a class="kb-btn" href="/" target="_blank" rel="noopener"><span class="material-symbols-outlined">open_in_new</span>Открыть сайт</a>
+  </div>
+
+  <div class="kb-kpis">
+    {% for kpi in kpis %}
+      <a class="kb-kpi" href="{{ kpi.href }}">
+        <span class="kb-kpi__icon material-symbols-outlined">{{ kpi.icon }}</span>
+        <span class="kb-kpi__value">{{ kpi.value }}</span>
+        <span class="kb-kpi__title">{{ kpi.title }}</span>
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="kb-grid">
+    <section class="kb-panel">
+      <header class="kb-panel__head">
+        <h2>Последние заявки на бронь</h2>
+        <a href="{% url 'admin:contacts_bookingrequest_changelist' %}">Все заявки →</a>
+      </header>
+      {% if latest_bookings %}
+        <div class="kb-table-wrap">
+          <table class="kb-table">
+            <thead><tr><th>Гость</th><th>Даты</th><th>Номер</th><th>Статус</th></tr></thead>
+            <tbody>
+              {% for b in latest_bookings %}
+                <tr onclick="location.href='{{ b.url }}'">
+                  <td><strong>{{ b.name }}</strong><small>{{ b.phone }}</small></td>
+                  <td>{{ b.dates }}</td>
+                  <td>{{ b.room }}</td>
+                  <td><span class="kb-badge kb-badge--{{ b.status_code }}">{{ b.status }}</span></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="kb-empty"><span class="material-symbols-outlined">inbox</span>Заявок пока нет — они появятся здесь, как только гости оставят бронь на сайте.</p>
+      {% endif %}
+    </section>
+
+    <section class="kb-panel">
+      <header class="kb-panel__head"><h2>Быстрые разделы</h2></header>
+      <div class="kb-shortcuts">
+        {% for s in shortcuts %}
+          <a class="kb-shortcut" href="{{ s.href }}">
+            <span class="material-symbols-outlined">{{ s.icon }}</span>
+            <span><strong>{{ s.title }}</strong><small>{{ s.text }}</small></span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
