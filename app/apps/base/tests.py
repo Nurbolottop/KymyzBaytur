@@ -56,3 +56,14 @@ class SeoFilesTest(TestCase):
 
     def test_yandex_verification(self):
         self.assertContains(self.client.get('/yandex_eb9939a8c3ea03f0.html'), 'Verification: eb9939a8c3ea03f0')
+
+
+class AdminThemeTest(TestCase):
+    def test_login_page(self):
+        response = self.client.get('/admin/login/')
+        self.assertContains(response, 'Панель управления')
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_wrong_password_shows_error(self):
+        response = self.client.post('/admin/login/', {'username': 'x', 'password': 'y'})
+        self.assertContains(response, 'class="alert"')
