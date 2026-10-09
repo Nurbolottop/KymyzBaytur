@@ -1,9 +1,10 @@
-from django.db.models import Q
+from django.db.models import Avg, Count, Q
 from django.shortcuts import render
 from django.utils import timezone
 
 from apps.cms.models import FAQ, GalleryImage, Promo, Review, Room, ServiceCategory
-from .models import HeroSlide
+from . import seo
+from .models import HeroSlide, SiteSettings
 
 
 def active_promos():
@@ -14,9 +15,12 @@ def active_promos():
 
 
 def home(request):
+    rooms = list(Room.objects.filter(is_active=True).prefetch_related('rates'))
+    rating = Review.objects.filter(is_published=True).aggregate(avg=Avg('rating'), count=Count('id'))
     return render(request, 'pages/home.html', {
+        'structured_data': [seo.lodging_business(request, SiteSettings.load(), rooms, rating)],
         'slides': HeroSlide.objects.filter(is_active=True),
-        'rooms': Room.objects.filter(is_active=True).prefetch_related('rates')[:3],
+        'rooms': rooms[:3],
         'services': ServiceCategory.objects.filter(show_on_home=True)[:6],
         'promos': active_promos()[:2],
         'reviews': Review.objects.filter(is_published=True)[:8],

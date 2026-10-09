@@ -17,7 +17,7 @@
         {% if room.photos.all|length > 1 %}
           <div class="room-gallery__thumbs">
             {% for photo in room.photos.all %}{% if not forloop.first %}
-              <a href="{{ photo.image_url }}" data-lightbox data-caption="{{ room.name }}"><img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="200px" alt="" loading="lazy"></a>
+              <a href="{{ photo.image_url }}" data-lightbox data-caption="{{ room.name }}"><img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="200px" alt="{{ room.name }} — фото {{ forloop.counter }}" loading="lazy"></a>
             {% endif %}{% endfor %}
           </div>
         {% endif %}

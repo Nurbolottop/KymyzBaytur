@@ -76,3 +76,11 @@ def srcset(url):
 def static_srcset(path):
     from django.templatetags.static import static
     return _srcset_for(static(path))
+
+
+@register.filter
+def ld_json(data):
+    """Словарь → JSON для <script type="application/ld+json"> (с защитой от </script>)."""
+    import json
+    raw = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+    return mark_safe(raw.replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026'))

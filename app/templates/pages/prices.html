@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static humanize %}
 {% block title %}Цены на сезон — {{ site.name }}{% endblock %}
+{% block description %}Цены на кымызолечение в Суусамыре на сезон {% now 'Y' %}: проживание{% if min_price %} от {{ min_price|intcomma }} сом/сутки{% endif %} с питанием и кобыльим молоком, юрты, массаж, баня, трансфер.{% endblock %}
 
 {% block content %}
 {% static 'img/kymyz-grandma.webp' as hero_img %}
