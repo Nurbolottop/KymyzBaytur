@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static assets %}
 {% block title %}Услуги — {{ site.name }}{% endblock %}
+{% block description %}Услуги кымызолечебницы «Байтур» в Суусамыре: массаж, ванны Залманова, баня и горячий чан, конные прогулки, банкеты в юрте и трансфер из Бишкека. Цены на сезон.{% endblock %}
 
 {% block content %}
 {% static 'img/chan.webp' as hero_img %}
@@ -15,7 +16,7 @@
     {% for category in categories %}
       <article class="service-block{% cycle '' ' service-block--reverse' %}" id="{{ category.slug }}">
         <div class="service-block__media reveal-img">
-          <img src="{{ category.image_url }}" srcset="{{ category.image_url|srcset }}" sizes="(max-width: 1080px) 92vw, 560px" alt="" loading="lazy">
+          <img src="{{ category.image_url }}" srcset="{{ category.image_url|srcset }}" sizes="(max-width: 1080px) 92vw, 560px" alt="{{ category.name }} в кымызолечебнице «Байтур», Суусамыр" loading="lazy">
         </div>
         <div class="service-block__body reveal">
           <span class="service-card__icon"><svg class="icon"><use href="#i-{{ category.icon }}"/></svg></span>
@@ -44,7 +45,7 @@
     <div class="grid grid--2">
       {% for promo in promos %}
         <article class="promo glass glass--light reveal spot">
-          <img src="{{ promo.image_url }}" srcset="{{ promo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
+          <img src="{{ promo.image_url }}" srcset="{{ promo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="Акция: {{ promo.title }}" loading="lazy">
           <div class="promo__body">
             {% if promo.badge %}<span class="promo__badge">{{ promo.badge }}</span>{% endif %}
             <h3>{{ promo.title }}</h3>

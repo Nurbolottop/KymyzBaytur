@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{% block title %}{{ site.name }} — кымызолечение в Суусамыре{% endblock %}</title>
   <meta name="description" content="{% block description %}Кымызолечебница «Байтур» в Суусамырской долине: натуральный кымыз, юрты и коттеджи, трёхразовое питание, баня и массаж. 3 часа от Бишкека.{% endblock %}">
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+  {% block robots %}{% endblock %}
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   <meta property="og:title" content="{% block og_title %}{{ site.name }}{% endblock %}">
   <meta property="og:description" content="Кымызолечение в горах Суусамыра: натуральный кымыз, чистый воздух, юрты и коттеджи.">
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/hero-mountains.jpg' %}">
@@ -14,7 +20,8 @@
   <link rel="preload" href="{% static 'fonts/manrope-normal-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
   <style>{% inline_css 'css/style.css' %}</style>
   <script>document.documentElement.classList.add('js')</script>
-  {% block head %}{% endblock %}
+  {% for item in structured_data %}<script type="application/ld+json">{{ item|ld_json }}</script>
+  {% endfor %}{% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
   {% include 'include/icons.html' %}

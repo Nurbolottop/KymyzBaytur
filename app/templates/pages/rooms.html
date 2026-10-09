@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static humanize %}
 {% block title %}Номера и юрты — {{ site.name }}{% endblock %}
+{% block description %}Номера и юрты кымызолечебницы «Байтур» в Суусамыре{% if min_price %} — от {{ min_price|intcomma }} сом/сутки{% endif %}. Трёхразовое питание и пятиразовое кобылье молоко включены, дети до 6 лет бесплатно.{% endblock %}
 
 {% block content %}
 {% static 'img/room-lux.webp' as hero_img %}

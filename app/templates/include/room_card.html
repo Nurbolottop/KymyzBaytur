@@ -1,7 +1,7 @@
 {% load humanize assets %}
 <article class="room-card reveal spot" data-tilt>
   <a class="room-card__media" href="{{ room.get_absolute_url }}">
-    <img src="{{ room.image_url }}" srcset="{{ room.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
+    <img src="{{ room.image_url }}" srcset="{{ room.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="Интерьер: {{ room.get_kind_display|lower }} «{{ room.name }}» в кымызолечебнице «Байтур»" loading="lazy">
     <span class="room-card__tag glass">{{ room.get_kind_display }}</span>
     {% if room.min_price %}<span class="room-card__price glass"><small>от</small>{{ room.min_price|intcomma }} <small>сом</small></span>{% endif %}
   </a>

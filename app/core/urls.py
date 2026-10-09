@@ -10,10 +10,29 @@ from django.views.generic import TemplateView
 from apps.cms.models import Room
 
 
+def _content_date():
+    """Дата последнего изменения контента сайта: шаблоны и статика проекта."""
+    import datetime
+    from pathlib import Path
+    latest = max(
+        f.stat().st_mtime
+        for folder in (settings.BASE_DIR / 'templates', settings.BASE_DIR / 'static' / 'css')
+        for f in Path(folder).rglob('*') if f.is_file()
+    )
+    return datetime.date.fromtimestamp(latest)
+
+
+CONTENT_DATE = _content_date()
+
+
 def sitemap(request):
-    names = ['home', 'about', 'kymyz', 'rooms', 'services', 'prices', 'gallery', 'reviews', 'contacts', 'booking']
-    paths = [reverse(n) for n in names] + [r.get_absolute_url() for r in Room.objects.filter(is_active=True)]
-    return render(request, 'sitemap.xml', {'paths': paths}, content_type='application/xml')
+    pages = [('home', '1.0'), ('kymyz', '0.9'), ('rooms', '0.9'), ('prices', '0.9'), ('booking', '0.8'),
+             ('services', '0.8'), ('about', '0.7'), ('gallery', '0.7'), ('reviews', '0.6'), ('contacts', '0.7')]
+    entries = [(reverse(name), priority) for name, priority in pages]
+    entries += [(room.get_absolute_url(), '0.8') for room in Room.objects.filter(is_active=True)]
+    return render(request, 'sitemap.xml', {'entries': entries, 'lastmod': CONTENT_DATE.isoformat()},
+                  content_type='application/xml')
+
 
 admin.site.site_header = 'Байтур — кымызолечебница'
 admin.site.site_title = 'Байтур'

@@ -6,7 +6,7 @@
 <section class="hero" data-slider>
   <div class="hero__media" data-parallax="0.3">
     {% for slide in slides %}
-      <img class="hero__bg{% if forloop.first %} is-active is-first{% endif %}" {% if forloop.first %}src="{{ slide.image_url }}" srcset="{{ slide.image_url|srcset }}" fetchpriority="high"{% else %}data-src="{{ slide.image_url }}" data-srcset="{{ slide.image_url|srcset }}"{% endif %} sizes="100vw" alt="" data-slide-bg>
+      <img class="hero__bg{% if forloop.first %} is-active is-first{% endif %}" {% if forloop.first %}src="{{ slide.image_url }}" srcset="{{ slide.image_url|srcset }}" fetchpriority="high"{% else %}data-src="{{ slide.image_url }}" data-srcset="{{ slide.image_url|srcset }}"{% endif %} sizes="100vw" alt="{{ slide.title }} — кымызолечебница «Байтур»" data-slide-bg>
     {% endfor %}
   </div>
   <div class="hero__shade" aria-hidden="true"></div>
@@ -173,7 +173,7 @@
 </section>
 
 <section class="lake">
-  <div class="lake__bg" data-parallax="0.2"><img src="{% static 'img/hero-valley.webp' %}" srcset="{% static_srcset 'img/hero-valley.webp' %}" sizes="100vw" alt="" loading="lazy"></div>
+  <div class="lake__bg" data-parallax="0.2"><img src="{% static 'img/hero-valley.webp' %}" srcset="{% static_srcset 'img/hero-valley.webp' %}" sizes="100vw" alt="Долина Суусамыр: юрты и табуны на альпийских лугах" loading="lazy"></div>
   <div class="lake__inner container">
     <span class="eyebrow eyebrow--light reveal">Высокогорная долина</span>
     <p class="lake__word" data-split>Суусамыр</p>
@@ -191,7 +191,7 @@
     <div class="grid grid--3">
       {% for service in services %}
         <a class="service-card reveal spot" href="{% url 'services' %}#{{ service.slug }}" data-tilt>
-          <img src="{{ service.image_url }}" srcset="{{ service.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
+          <img src="{{ service.image_url }}" srcset="{{ service.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="Услуга в Суусамыре: {{ service.name|lower }}" loading="lazy">
           <div class="service-card__body glass glass--dark">
             <span class="service-card__icon"><svg class="icon"><use href="#i-{{ service.icon }}"/></svg></span>
             <h3>{{ service.name }}</h3>
@@ -211,7 +211,7 @@
     <div class="grid grid--2">
       {% for promo in promos %}
         <article class="promo glass glass--light reveal spot">
-          <div class="promo__media"><img src="{{ promo.image_url }}" srcset="{{ promo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy"></div>
+          <div class="promo__media"><img src="{{ promo.image_url }}" srcset="{{ promo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="Акция кымызолечебницы «Байтур»: {{ promo.title }}" loading="lazy"></div>
           <div class="promo__body">
             {% if promo.badge %}<span class="promo__badge">{{ promo.badge }}</span>{% endif %}
             <h3>{{ promo.title }}</h3>
@@ -256,7 +256,7 @@
     <div class="mosaic" data-lightbox-group>
       {% for photo in gallery %}
         <a class="mosaic__item reveal-img" href="{{ photo.image_url }}" data-lightbox data-caption="{{ photo.title }}">
-          <img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
+          <img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="{{ photo.title|default:'Отдых в Суусамыре' }} — кымызолечебница «Байтур»" loading="lazy">
           {% if photo.title %}<span class="mosaic__caption glass">{{ photo.title }}</span>{% endif %}
         </a>
       {% endfor %}

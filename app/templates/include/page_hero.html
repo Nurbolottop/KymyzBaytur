@@ -1,6 +1,6 @@
 {% load assets %}
 <section class="page-hero">
-  <div class="page-hero__bg" data-parallax="0.25"><img src="{{ image }}" srcset="{{ image|srcset }}" sizes="100vw" alt="" fetchpriority="high"></div>
+  <div class="page-hero__bg" data-parallax="0.25"><img src="{{ image }}" srcset="{{ image|srcset }}" sizes="100vw" alt="{{ image_alt|default:title }} — кымызолечебница «Байтур», Суусамыр" fetchpriority="high"></div>
   <div class="aurora aurora--hero" aria-hidden="true"><span></span><span></span></div>
   <div class="container page-hero__inner">
     <nav class="breadcrumbs glass" aria-label="Хлебные крошки">

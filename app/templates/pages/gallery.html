@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static assets %}
 {% block title %}Галерея — {{ site.name }}{% endblock %}
+{% block description %}Фото кымызолечебницы «Байтур»: юрты и коттеджи, номера, горы и реки Суусамырской долины, табуны лошадей и отдых на природе.{% endblock %}
 
 {% block content %}
 {% static 'img/yurt-camp.webp' as hero_img %}
@@ -15,7 +16,7 @@
     <div class="gallery-grid" data-lightbox-group>
       {% for photo in images %}
         <a class="gallery-grid__item" href="{{ photo.image_url }}" data-lightbox data-category="{{ photo.category }}" data-caption="{{ photo.title }}">
-          <img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="" loading="lazy">
+          <img src="{{ photo.image_url }}" srcset="{{ photo.image_url|srcset }}" sizes="(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 400px" alt="{{ photo.title|default:'Отдых в Суусамыре' }} — кымызолечебница «Байтур»" loading="lazy">
           {% if photo.title %}<span class="gallery-grid__caption">{{ photo.title }}</span>{% endif %}
         </a>
       {% endfor %}

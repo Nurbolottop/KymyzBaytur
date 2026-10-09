@@ -38,3 +38,18 @@ class SeoFilesTest(TestCase):
     def test_google_verification(self):
         self.assertContains(self.client.get('/google7cea8f04d4a415ac.html'),
                             'google-site-verification: google7cea8f04d4a415ac.html')
+
+    def test_seo_tags(self):
+        import json, re
+        home = self.client.get('/?utm_source=x').content.decode()
+        self.assertIn('<link rel="canonical" href="http://testserver/">', home)
+        data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', home).group(1))
+        self.assertEqual(data['@type'], 'LodgingBusiness')
+        self.assertIn('geo', data)
+        self.assertIn('<lastmod>', self.client.get('/sitemap.xml').content.decode())
+        descriptions = {re.search(r'<meta name="description" content="([^"]*)"', self.client.get(u).content.decode()).group(1)
+                        for u in ['/', '/about/', '/prices/', '/rooms/', '/contacts/', '/gallery/', '/reviews/', '/services/', '/booking/']}
+        self.assertEqual(len(descriptions), 9)
+        gallery = self.client.get('/gallery/').content.decode()
+        empty_alts = [tag for tag in re.findall(r'<img[^>]*>', gallery) if 'alt=""' in tag and 'brand__logo' not in tag]
+        self.assertEqual(empty_alts, [])
