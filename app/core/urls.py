@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -19,6 +20,9 @@ admin.site.site_title = 'Байтур'
 admin.site.index_title = 'Управление сайтом'
 
 urlpatterns = [
+    # Подтверждение прав в Google Search Console — файл не удалять
+    path('google7cea8f04d4a415ac.html',
+         lambda request: HttpResponse('google-site-verification: google7cea8f04d4a415ac.html', content_type='text/html')),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     path('sitemap.xml', sitemap),
     path('admin/', admin.site.urls),
