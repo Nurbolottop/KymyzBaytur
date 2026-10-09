@@ -42,6 +42,12 @@ urlpatterns = [
     # Подтверждение прав в Google Search Console — файл не удалять
     path('google7cea8f04d4a415ac.html',
          lambda request: HttpResponse('google-site-verification: google7cea8f04d4a415ac.html', content_type='text/html')),
+    # Подтверждение прав в Яндекс Вебмастере — файл не удалять
+    path('yandex_eb9939a8c3ea03f0.html',
+         lambda request: HttpResponse(
+             '<html>\n    <head>\n        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n'
+             '    </head>\n    <body>Verification: eb9939a8c3ea03f0</body>\n</html>\n',
+             content_type='text/html; charset=UTF-8')),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     path('sitemap.xml', sitemap),
     path('admin/', admin.site.urls),
