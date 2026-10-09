@@ -34,3 +34,7 @@ class SeoFilesTest(TestCase):
         self.assertEqual(robots['Content-Type'], 'text/plain')
         self.assertContains(robots, 'Sitemap:')
         self.assertContains(self.client.get('/sitemap.xml'), '/rooms/lux/')
+
+    def test_google_verification(self):
+        self.assertContains(self.client.get('/google7cea8f04d4a415ac.html'),
+                            'google-site-verification: google7cea8f04d4a415ac.html')
