@@ -53,3 +53,6 @@ class SeoFilesTest(TestCase):
         gallery = self.client.get('/gallery/').content.decode()
         empty_alts = [tag for tag in re.findall(r'<img[^>]*>', gallery) if 'alt=""' in tag and 'brand__logo' not in tag]
         self.assertEqual(empty_alts, [])
+
+    def test_yandex_verification(self):
+        self.assertContains(self.client.get('/yandex_eb9939a8c3ea03f0.html'), 'Verification: eb9939a8c3ea03f0')
