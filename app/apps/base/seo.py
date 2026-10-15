@@ -60,6 +60,16 @@ def lodging_business(request, site, rooms=None, rating=None):
                          'Конные прогулки', 'Wi-Fi', 'Трансфер из Бишкека')
         ],
         'sameAs': [url for url in (site.instagram, site.map_link) if url],
+        # Связь с другими проектами компании — чтобы поисковики и ИИ не путали места
+        'parentOrganization': {
+            '@type': 'Organization',
+            'name': 'Байтур',
+            'url': 'https://baytur.kg/',
+            'subOrganization': [
+                {'@type': 'Resort', 'name': 'Baytur Resort & Spa (Иссык-Куль)', 'url': 'https://resort.baytur.kg/'},
+                {'@type': 'SkiResort', 'name': 'Горнолыжная база Байтур (Тоо-Ашуу)', 'url': 'https://ski.baytur.kg/'},
+            ],
+        },
     }
     if rooms:
         prices = [rate.price_full for room in rooms for rate in room.rates.all()]
