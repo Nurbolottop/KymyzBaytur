@@ -51,21 +51,6 @@ Allow: /
 Disallow: /admin/
 Disallow: /booking/success/
 
-User-agent: ClaudeBot
-Allow: /
-Disallow: /admin/
-Disallow: /booking/success/
-
-User-agent: Claude-SearchBot
-Allow: /
-Disallow: /admin/
-Disallow: /booking/success/
-
-User-agent: Claude-User
-Allow: /
-Disallow: /admin/
-Disallow: /booking/success/
-
 User-agent: Applebot
 Allow: /
 Disallow: /admin/

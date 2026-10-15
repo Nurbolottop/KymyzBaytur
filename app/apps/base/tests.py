@@ -102,7 +102,7 @@ class AiReadinessTest(TestCase):
 
     def test_robots_allows_ai_bots(self):
         text = self.client.get('/robots.txt').content.decode()
-        for bot in ['GPTBot', 'OAI-SearchBot', 'PerplexityBot', 'ClaudeBot', 'Google-Extended']:
+        for bot in ['GPTBot', 'OAI-SearchBot', 'PerplexityBot', 'Google-Extended']:
             self.assertIn(f'User-agent: {bot}', text)
 
     def test_structured_data(self):
