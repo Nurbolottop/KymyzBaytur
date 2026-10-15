@@ -67,3 +67,25 @@ class AdminThemeTest(TestCase):
     def test_wrong_password_shows_error(self):
         response = self.client.post('/admin/login/', {'username': 'x', 'password': 'y'})
         self.assertContains(response, 'class="alert"')
+
+
+class SeoMetaTest(TestCase):
+    def test_titles_unique_and_contain_keywords(self):
+        import re
+        urls = ['/', '/about/', '/kymyz/', '/rooms/', '/rooms/lux/', '/services/', '/prices/',
+                '/gallery/', '/reviews/', '/contacts/', '/booking/']
+        titles, descriptions = set(), set()
+        for url in urls:
+            html = self.client.get(url).content.decode()
+            title = re.search(r'<title>(.*?)</title>', html, re.S).group(1).strip()
+            og = re.search(r'<meta property="og:title" content="([^"]*)"', html).group(1)
+            desc = re.search(r'<meta name="description" content="([^"]*)"', html).group(1)
+            self.assertEqual(title.replace('&quot;', '"'), og.replace('&quot;', '"'), url)
+            self.assertLessEqual(len(desc), 200, url)
+            self.assertIn('meta name="keywords"', html)
+            titles.add(title)
+            descriptions.add(desc)
+        self.assertEqual(len(titles), len(urls))
+        self.assertEqual(len(descriptions), len(urls))
+        self.assertIn('Кумысолечение', self.client.get('/').content.decode())
+        self.assertIn('от 6 980 сом', self.client.get('/prices/').content.decode())

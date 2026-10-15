@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from apps.base import seo
+from apps.base.seo_meta import page_meta
 from apps.base.models import SiteSettings
 from apps.base.views import active_promos
 from .forms import ReviewForm
@@ -29,6 +30,7 @@ def room_detail(request, slug):
     room = get_object_or_404(Room.objects.prefetch_related('rates', 'photos'), slug=slug, is_active=True)
     others = Room.objects.filter(is_active=True).exclude(pk=room.pk).prefetch_related('rates')[:3]
     return render(request, 'pages/room_detail.html', {
+        'meta': page_meta('room_detail', room=room),
         'room': room,
         'others': others,
         'structured_data': [

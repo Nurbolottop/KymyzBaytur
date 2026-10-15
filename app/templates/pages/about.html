@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% load static assets %}
-{% block title %}О нас — {{ site.name }}{% endblock %}
-{% block description %}О кымызолечебнице «Байтур» в Суусамырской долине: история, юрты и коттеджи, свой кымыз, баня, массаж и конные прогулки. Ответы на частые вопросы гостей.{% endblock %}
 
 {% block content %}
 {% static 'img/hero-valley.webp' as hero_img %}
-{% include 'include/page_hero.html' with title='О нас' subtitle='Кымызолечебница в Суусамырской долине — там, где начинается настоящий отдых.' image=hero_img %}
+{% include 'include/page_hero.html' with title='О кумысолечебнице «Байтур»' crumb='О нас' subtitle='Кымызолечебница в Суусамырской долине — там, где начинается настоящий отдых.' image=hero_img %}
 
 <section class="section section--light">
   <div class="container split">

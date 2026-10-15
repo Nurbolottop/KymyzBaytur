@@ -6,7 +6,7 @@
     <nav class="breadcrumbs glass" aria-label="Хлебные крошки">
       <a href="{% url 'home' %}">Главная</a>
       {% if parent_url %}<span class="breadcrumbs__sep"></span><a href="{{ parent_url }}">{{ parent_title }}</a>{% endif %}
-      <span class="breadcrumbs__sep"></span><span aria-current="page">{{ title }}</span>
+      <span class="breadcrumbs__sep"></span><span aria-current="page">{{ crumb|default:title }}</span>
     </nav>
     <h1 class="page-hero__title" data-split>{{ title }}</h1>
     {% if subtitle %}<p class="page-hero__subtitle reveal">{{ subtitle }}</p>{% endif %}
