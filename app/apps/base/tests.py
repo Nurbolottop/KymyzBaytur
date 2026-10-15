@@ -43,8 +43,8 @@ class SeoFilesTest(TestCase):
         import json, re
         home = self.client.get('/?utm_source=x').content.decode()
         self.assertIn('<link rel="canonical" href="http://testserver/">', home)
-        data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', home).group(1))
-        self.assertEqual(data['@type'], 'LodgingBusiness')
+        blocks = [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', home)]
+        data = next(b for b in blocks if b['@type'] == 'LodgingBusiness')
         self.assertIn('geo', data)
         self.assertIn('<lastmod>', self.client.get('/sitemap.xml').content.decode())
         descriptions = {re.search(r'<meta name="description" content="([^"]*)"', self.client.get(u).content.decode()).group(1)
@@ -89,3 +89,37 @@ class SeoMetaTest(TestCase):
         self.assertEqual(len(descriptions), len(urls))
         self.assertIn('Кумысолечение', self.client.get('/').content.decode())
         self.assertIn('от 6 980 сом', self.client.get('/prices/').content.decode())
+
+
+class AiReadinessTest(TestCase):
+    def test_llms_txt(self):
+        r = self.client.get('/llms.txt')
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r['Content-Type'].startswith('text/markdown'))
+        text = r.content.decode()
+        for needle in ['кумысолечение', 'Суусамыр', '+996 770 797 370', 'Люкс', '12 880', 'Массаж', 'Где пройти кумысолечение']:
+            self.assertIn(needle, text)
+
+    def test_robots_allows_ai_bots(self):
+        text = self.client.get('/robots.txt').content.decode()
+        for bot in ['GPTBot', 'OAI-SearchBot', 'PerplexityBot', 'ClaudeBot', 'Google-Extended']:
+            self.assertIn(f'User-agent: {bot}', text)
+
+    def test_structured_data(self):
+        import json, re
+        def ld(url):
+            html = self.client.get(url).content.decode()
+            return [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html)]
+        types = lambda url: {d['@type'] for d in ld(url)}
+        self.assertTrue({'WebSite', 'LodgingBusiness'} <= types('/'))
+        self.assertIn('FAQPage', types('/kymyz/'))
+        self.assertIn('FAQPage', types('/about/'))
+        self.assertIn('BreadcrumbList', types('/prices/'))
+        catalog = [d for d in ld('/services/') if 'hasOfferCatalog' in d][0]
+        self.assertTrue(catalog['hasOfferCatalog']['itemListElement'])
+
+    def test_sitemap_images_and_indexnow(self):
+        xml = self.client.get('/sitemap.xml').content.decode()
+        self.assertIn('<image:image>', xml)
+        from core.urls import INDEXNOW_KEY
+        self.assertContains(self.client.get(f'/{INDEXNOW_KEY}.txt'), INDEXNOW_KEY)

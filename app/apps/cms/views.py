@@ -41,8 +41,10 @@ def room_detail(request, slug):
 
 
 def services(request):
+    categories = list(ServiceCategory.objects.prefetch_related('items'))
     return render(request, 'pages/services.html', {
-        'categories': ServiceCategory.objects.prefetch_related('items'),
+        'structured_data': [seo.offer_catalog(request, categories)],
+        'categories': categories,
         'promos': active_promos(),
     })
 

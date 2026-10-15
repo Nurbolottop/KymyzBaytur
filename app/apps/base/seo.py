@@ -4,6 +4,18 @@ from django.templatetags.static import static
 # Точка на карте из 2GIS (карточка «Байтур Резорт»)
 GEO = {'latitude': 42.235104, 'longitude': 73.713022}
 
+# Другие названия, под которыми нас ищут и упоминают — помогает поисковикам и ИИ
+# связать все упоминания с одним местом
+ALTERNATE_NAMES = [
+    'Байтур', 'Кумысолечебница Байтур', 'Кымызолечебница Байтур', 'Байтур Резорт',
+    'Kymyz Baytur', 'Baytur Kymyz Therapy', 'Кымыз Байтур Суусамыр',
+]
+
+KNOWS_ABOUT = [
+    'Кумысолечение', 'Кымызолечение', 'Кымыз дарылоо', 'Кумыс', 'Кобылье молоко', 'Саамал',
+    'Отдых в юрте', 'Суусамырская долина', 'Отдых в горах Кыргызстана',
+]
+
 
 def absolute(request, path):
     return request.build_absolute_uri(path)
@@ -15,8 +27,18 @@ def lodging_business(request, site, rooms=None, rating=None):
         '@type': 'LodgingBusiness',
         '@id': absolute(request, '/#business'),
         'name': site.name,
-        'description': 'Кымызолечебница в Суусамырской долине: натуральный кымыз, юрты и коттеджи, '
-                       'трёхразовое питание, баня, массаж и конные прогулки.',
+        'alternateName': ALTERNATE_NAMES,
+        'slogan': 'Кымыз дарылоо · Kymyz Therapy',
+        'description': 'Кумысолечебница (кымызолечебница) «Байтур» в Суусамырской долине Кыргызстана, '
+                       '3 часа от Бишкека. Натуральный кумыс от своих кобылиц 5 раз в день, юрты и коттеджи, '
+                       'трёхразовое питание, баня, массаж, конные прогулки. Сезон — с мая по сентябрь.',
+        'knowsAbout': KNOWS_ABOUT,
+        'areaServed': ['Кыргызстан', 'Бишкек', 'Казахстан', 'Чуйская область'],
+        'hasMap': 'https://2gis.kg/bishkek/geo/70000001071813605',
+        'isAccessibleForFree': False,
+        'petsAllowed': False,
+        'containedInPlace': {'@type': 'Place', 'name': 'Суусамырская долина',
+                             'address': {'@type': 'PostalAddress', 'addressCountry': 'KG'}},
         'url': absolute(request, '/'),
         'logo': absolute(request, static('img/logo.png')),
         'image': [absolute(request, static(f'img/{name}.webp'))
@@ -108,4 +130,76 @@ def breadcrumbs(request, items):
             {'@type': 'ListItem', 'position': i, 'name': name, 'item': absolute(request, url)}
             for i, (name, url) in enumerate(items, start=1)
         ],
+    }
+
+
+
+def website(request, site):
+    """Сайт как сущность: название и связь с организацией."""
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        '@id': absolute(request, '/#website'),
+        'url': absolute(request, '/'),
+        'name': site.name,
+        'alternateName': ALTERNATE_NAMES,
+        'inLanguage': 'ru-RU',
+        'publisher': {'@id': absolute(request, '/#business')},
+    }
+
+
+def faq_page(questions):
+    """Вопросы-ответы — ИИ-поиск и Google берут отсюда готовые ответы."""
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': [
+            {'@type': 'Question', 'name': question,
+             'acceptedAnswer': {'@type': 'Answer', 'text': answer}}
+            for question, answer in questions
+        ],
+    }
+
+
+def offer_catalog(request, categories):
+    """Услуги с ценами из прайса."""
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'LodgingBusiness',
+        '@id': absolute(request, '/#business'),
+        'hasOfferCatalog': {
+            '@type': 'OfferCatalog',
+            'name': 'Услуги кумысолечебницы «Байтур»',
+            'itemListElement': [
+                {
+                    '@type': 'OfferCatalog',
+                    'name': category.name,
+                    'itemListElement': [
+                        {
+                            '@type': 'Offer',
+                            'itemOffered': {'@type': 'Service', 'name': item.name,
+                                            **({'description': item.note} if item.note else {})},
+                            'priceSpecification': {'@type': 'PriceSpecification', 'priceCurrency': 'KGS',
+                                                   'description': f'{item.price}' + (f', {item.duration}' if item.duration else '')},
+                        }
+                        for item in category.items.all()
+                    ],
+                }
+                for category in categories
+            ],
+        },
+    }
+
+
+def webpage(request, title, description, page_type='WebPage'):
+    return {
+        '@context': 'https://schema.org',
+        '@type': page_type,
+        '@id': request.build_absolute_uri(request.path) + '#webpage',
+        'url': request.build_absolute_uri(request.path),
+        'name': title,
+        'description': description,
+        'inLanguage': 'ru-RU',
+        'isPartOf': {'@id': absolute(request, '/#website')},
+        'about': {'@id': absolute(request, '/#business')},
     }

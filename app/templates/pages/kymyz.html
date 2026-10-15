@@ -68,5 +68,20 @@
   </div>
 </section>
 
+<section class="section section--light">
+  <div class="aurora" aria-hidden="true"><span></span><span></span></div>
+  <div class="container container--narrow">
+    {% include 'include/section_head.html' with eyebrow='Вопросы и ответы' title='Кумысолечение: частые вопросы' center=True %}
+    <div class="faq">
+      {% for question, answer in kymyz_faq %}
+        <details class="faq__item glass glass--light reveal"{% if forloop.first %} open{% endif %}>
+          <summary>{{ question }}<svg class="icon"><use href="#i-plus"/></svg></summary>
+          <p>{{ answer }}</p>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
 {% include 'include/cta.html' %}
 {% endblock %}

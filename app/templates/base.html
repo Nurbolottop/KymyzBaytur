@@ -7,7 +7,10 @@
   <meta name="description" content="{% block description %}{{ meta.description }}{% endblock %}">
   <meta name="keywords" content="{{ meta.keywords }}">
   <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
-  {% block robots %}{% endblock %}
+  {% block robots %}<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">{% endblock %}
+  <link rel="alternate" hreflang="ru" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+  <link rel="alternate" hreflang="x-default" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+  <link rel="alternate" type="text/markdown" title="Краткая информация для ИИ-ассистентов" href="/llms.txt">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:site_name" content="{{ site.name }}">
@@ -33,6 +36,7 @@
   <style>{% inline_css 'css/style.css' %}</style>
   <script>document.documentElement.classList.add('js')</script>
   {% for item in structured_data %}<script type="application/ld+json">{{ item|ld_json }}</script>
+  {% endfor %}{% for item in page_ld %}<script type="application/ld+json">{{ item|ld_json }}</script>
   {% endfor %}{% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">

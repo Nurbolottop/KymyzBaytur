@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{% for path, priority in entries %}  <url><loc>{{ request.scheme }}://{{ request.get_host }}{{ path }}</loc><lastmod>{{ lastmod }}</lastmod><priority>{{ priority }}</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+{% for e in entries %}  <url>
+    <loc>{{ request.scheme }}://{{ request.get_host }}{{ e.path }}</loc>
+    <lastmod>{{ lastmod }}</lastmod>
+    <priority>{{ e.priority }}</priority>{% for i in e.images %}
+    <image:image><image:loc>{{ i.loc }}</image:loc><image:title>{{ i.title }}</image:title></image:image>{% endfor %}
+  </url>
 {% endfor %}</urlset>

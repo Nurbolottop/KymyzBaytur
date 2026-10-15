@@ -1,4 +1,83 @@
 User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&fbclid&gclid&yclid /
+
+# Поисковые и ИИ-боты: разрешаем читать сайт, чтобы ассистенты знали о нас
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Yandex
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&fbclid&gclid&yclid /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /booking/success/
+
+User-agent: DuckAssistBot
+Allow: /
 Disallow: /admin/
 Disallow: /booking/success/
 
